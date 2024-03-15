@@ -347,6 +347,114 @@ hello_world <- "Hello World"
 print(hello_world)
 ```
 
+## Explore
+
+### Mean/Median & Summary
+
+* `mean()` and `median()` are passed arrays of values (usually from a data frame) to return the mean and median value.
+
+* `describe()` returns all summary statistics based on a given array.
+
+In the exercise below, you have the borders data-set loaded as `borders_data`. See if you can get the mean value for `LengthOfStay`, store it in a variable, and print that variable. Use the hint button if you need some help.
+
+```{python mean, exercise=TRUE, exercise.eval=TRUE}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data
+```
+
+```{python mean-hint-1}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data["LengthOfStay"]
+```
+
+
+```{python mean-hint-2}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data["LengthOfStay"].mean()
+```
+
+
+```{python mean-hint-3}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+mean_value = borders_data["LengthOfStay"].mean()
+
+print(mean_value)
+```
+
+```{python mean-solution}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+mean_value = borders_data["LengthOfStay"].mean()
+
+print(mean_value)
+```
+
+```{python mean-check}
+grade_code()
+```
+
+
+### Frequencies & Crosstabs
+
+* Frequency: `<df_name>["<col_name>").value_counts()`
+* Crosstab: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"])`
+* Crosstab & Add Col/Row Totals: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"], margins = True)`
+tab
+Create a crosstab for `HospitalCode` and `Sex`, add column and row totals, store the table in a variable, and print it out. Use the hint button if you need some help.
+
+```{python freq, exercise=TRUE}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python freq-hint-1}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+...pd.crosstab(...)
+```
+
+```{python freq-hint-2}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"]...)
+```
+
+```{python freq-hint-3}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
+print(crosstab_hospitalcode_sex)
+```
+
+```{python freq-solution}
+import pandas as pd 
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
+
+print(crosstab_hospitalcode_sex)
+```
+
+```{python freq-check}
+grade_code()
+```
 
 ## Help & Feedback
 
