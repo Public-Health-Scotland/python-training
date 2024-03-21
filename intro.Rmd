@@ -741,11 +741,69 @@ grade_code()
 
 ##Wrangle – Part 2
 
-· Manipulate Strings
+### Manipulate Strings
 
-· Aggregate Dataframe
+There are a number of ways to manipulate strings in Python. Here are a few methods to achieve various outputs:
 
-· Merge Dataframe
+* Split values at a delimiter: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.split('<delimiter>')`
+
+*Example: `borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')`
+
+After the above line of code, if you `print(borders_data)`, you will see that all the values in the column `ManagementofPatient` has been split at the value 'a'.
+
+* Strip values of leading and trailing white space: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.strip()`
+* Convert values to upper case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.upper()`
+* Convert values to lower case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.lower()`
+* Replace values: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.replace('<old_value>','<new_value>')`
+
+It is important to note that this is not an exhaustive list of all the string manipulation methods - there are many more to find out and use, depending on your specification requirements.
+
+In the exercise below, read the borders_inc_age csv in, then replace all instances of `B120H` in the `HospitalCode` column with the phrase `BRILLIANT`.
+
+```{python manipulate-string, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python manipulate-string-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = ...
+```
+
+```{python manipulate-string-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+borders_data['HospitalCode'] = borders_data['HospitalCode']...
+```
+
+```{python manipulate-string-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
+```
+
+```{python manipulate-string-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
+```
+
+```{python manipulate-string-check}
+grade_code()
+```
+
+### Aggregate Dataframe
+
+### Merge Dataframe
 
 ## Help & Feedback
 
