@@ -464,39 +464,47 @@ For the next sections, we will focus on using the pandas module manipulate data 
 
 ### Location
 
-There are multiple ways to wrangling data in Python - some are more straightforward than others.
+There are multiple ways to wrangle data in Python - some are more straightforward than others.
 
-To begin efficiently locating and manipulating data, it would be beneficial to become familiar with the less straightforward concept of locating the data.
+To begin efficiently locating and manipulating data, it would be beneficial to become familiar with the concept of locating data in a dataframe.
 
-The `loc` and `iloc` attributes are used indexing, which allows for the locating of data from a dataframe based on row and column labels.
+The `loc` and `iloc` attributes are used for indexing, which allows for the locating of data from a dataframe based on row and column labels/indexes.
 
 `loc` - Label-based indexing (such as Hospital Codes, Names, etc.).
-`iloc` - Index-based indexing (remember Python indexes count from 0 onwards).
+`iloc` - Integer-based indexing (remember Python indexes count from 0).
 
-By default, `loc` and `iloc` locates row indexes, instead of column.
+By default, `loc` and `iloc` locates row indexes, instead of column indexes.
 
-
-`<df_name>.loc['<row_label>']` will select all the rows with the row_label.
+`<df_name>.loc['<row_label>']` will select the first row with row_label as the label index.
 `<df_name>.iloc['<row_index_label>']` will select the row at index == row_index_label.
 
-However, you can use loc and iloc to locate rows and columns alike:
 
-`<df_name>.loc['<row_label>']` will select all the rows with the row_label.
-`<df_name>.iloc['<row_index_label>']` will select the row at index == row_index_label.
+This does not mean the location attributes are isolated to only locating rows - in fact, the real power of the location attributes is in its ability to freely locate relevant rows, columns, values, etc.
+
+In the next few sections, we will see how useful the location attributes can be.
+
 
 ### Select / Slice Out Columns
 
-By far, the most straightfoward way to select a column is by the following method:
+By far, the most straightforward way to select a column is by the following method:
 
 * Selecting/Slicing Out a column: `<df_name>["<col_name>"]`
 
-However, to be able to start retrieve and manipulate data well, it would be useful to become familiar with loc and iloc.
+However, by using `loc` and `iloc`, we can start to specify further:
 
-* Selecting/Slicing Out a column: `<df_name>.loc["<col_name>"]`
+* Selecting/Slicing Out a column: `<df_name>.loc["<row_index>","<column_index>"]`
 
-Using the data stored in the borders_inc_age csv file, read it in, select/slice out the `HospitalCode` column, and print out the selected column.
+* Example: `borders_data.loc[:,"Specialty"]` will obtain all the rows from the `Specialty` column.
 
-```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
+You may be wondering why using the `loc` attribute is helpful here when the first method is much more simple.
+
+Using `loc`, you have the ability to select specific rows within that column
+
+* Example: `borders_data.loc[0:2,"HospitalCode"]` will obtain the first 3 rows from the `HospitalCode` column.
+
+Read in the data stored in the borders_inc_age csv file, select/slice out the entire `HospitalCode` column using pandas, and print out the selected column.
+
+```{python select, exercise = TRUE, exercise.setup = "pandas-setup"}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
@@ -504,184 +512,229 @@ column_hospital_code =
 
 ```
 
-```{python freq-hint-1}
+```{python select-hint-1}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-column_hospital_code = borders_data
+column_hospital_code = borders_data.loc
 ```
 
-```{python freq-hint-2}
+```{python select-hint-2}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-column_hospital_code = borders_data[""]
+column_hospital_code = borders_data.loc[:,]
 ```
 
-```{python freq-hint-3}
+```{python select-hint-3}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-column_hospital_code = borders_data["HospitalCode"]
+column_hospital_code = borders_data.loc[:,'HospitalCode']
 
 print(column_hospital_code)
 ```
 
-```{python freq-solution}
+```{python select-solution}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-column_hospital_code = borders_data["HospitalCode"]
+column_hospital_code = borders_data.loc[:,'HospitalCode']
 
 print(column_hospital_code)
 ```
 
-```{python freq-check}
+```{python select-check}
 grade_code()
 ```
 
 
 ### Select Rows
 
+The pandas library has multiple way to select rows, depending on your criteria.
 
-```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
+* Select Rows by index: `<df_name>.iloc[<index_number>]']`
+* Example: `borders_data.iloc[0]` *This will show the first row of the dataframe *
+
+* Select Rows which have a specific value in a specific column: `<df_name>[<df_name>['<column_name>'] == '<row_label>']`
+* Example: `borders_data[borders_data['HospitalCode'] == 'B120H']` *This will show all the rows which have `B120H` in the `HospitalCode` column *
+
+* Select Rows by index: `<df_name>.loc['<row_label>']']`
+* Example: `borders_data.loc['row_label']` *This will locate the first instance of the row with row_label as the label index - please note, this csv file does not have row labels*
+
+Read in the borders_inc_age csv file, and select all the rows with `Specialty == A1`.
+
+```{python select-row, exercise = TRUE, exercise.setup = "pandas-setup"}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
 
 ```
 
-```{python freq-hint-1}
+```{python select-row-hint-1}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-...pd.crosstab(...)
+rows_of_a1 = borders_data[...]
 ```
 
-```{python freq-hint-2}
+```{python select-row-hint-2}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"]...)
+rows_of_a1 = borders_data[borders_data['...']...]
 ```
 
-```{python freq-hint-3}
+```{python select-row-hint-3}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-print(crosstab_hospitalcode_sex)
+rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
 ```
 
-```{python freq-solution}
+```{python select-row-solution}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-
-print(crosstab_hospitalcode_sex)
+rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
 ```
 
-```{python freq-check}
+```{python select-row-check}
 grade_code()
 ```
 
 ### Add a New Row/Column
 
+Adding a new row/column is straightforward.
 
-```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
+When adding a new row, you can first create a dictionary, where `keys` (column names) and `values` (corresponding values in the new row) are mapped together.
+
+* Create dictionary of mapped keys (columns) and values (row values): 
+`new_row_data = {'<column_name>':'<row_value>','<column_name>':'<row_value>','<column_name>':'<row_value>'}`
+
+Then, you can append the new row into the dataframe.
+
+`<df_name> = <df_name>.append(new_row_data)`
+
+If you want to leave the value blank, you can input `None` into the row_value.
+
+
+* Add new column: `<df_name>['<new_column_name>'] = <row_value>`
+
+This will create a new column with all the rows populated by the row_value.
+
+
+Read in the borders_inc_age file. Create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows.
+
+```{python new-row, exercise = TRUE, exercise.setup = "pandas-setup"}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
+
 
 
 ```
 
-```{python freq-hint-1}
+```{python new-row-hint-1}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-...pd.crosstab(...)
+borders_data[...] ...
 ```
 
-```{python freq-hint-2}
+```{python new-row-hint-2}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"]...)
+borders_data['number_of_eyebrows'] = ....
 ```
 
-```{python freq-hint-3}
+```{python new-row-hint-3}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-print(crosstab_hospitalcode_sex)
+borders_data['number_of_eyebrows'] = 2
 ```
 
-```{python freq-solution}
+```{python new-row-solution}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-
-print(crosstab_hospitalcode_sex)
+borders_data['number_of_eyebrows'] = 2
 ```
 
-```{python freq-check}
+```{python new-row-check}
 grade_code()
 ```
 
 ### Delete a Row/Columns
 
+There are multiple ways to delete rows and columns. 
 
-```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
+When deleting a row, you could create a dataframe with the rows containing certain row_values filtered out:
+
+* Deleting a row: `<df_name> = <df_name>[<df_name>['<column_name>'] != '<row_value>']`
+
+You can also delete rows based on their index and row_label by slicing the locations.
+
+* Removing the first row: `<df_name> = <df_name>.iloc[1:]` 
+
+If we want to remove only the 2nd row using the same method, you would need to using locate the specific rows you want to keep, and append them together. 
+
+* Removing the second row: `<df_name> = <df_name>.iloc[:1].append(<df_name>.iloc[2:]`
+
+Alternatively, you could use the `drop()` method.
+
+* Removing the second row: `<df_name> = <df_name>.drop(<df_name>.index[1])`
+
+* Removing the second row row_label: `<df_name> = <df_name>.drop('<row_label>', axis=0)` **`axis=0` specifies you are removing a row.**
+
+* Removing the second row by index position: `<df_name> = <df_name>.drop(index_position, axis=0)`
+
+The `drop()` method can also be used to drop columns.
+
+* Removing a column by label: `<df_name> = <df_name>.drop('<column_name>', axis=1)` **`axis=1` specifies you are removing a column.**
+
+* Removing a column by index position: `<df_name> = <df_name>.drop(<df_name>.columns[index_position], axis=1)` 
+
+
+Read in the borders_inc_age csv. Remove all the rows which have `Male` as the value in the `Sex` column.
+
+```{python delete-row, exercise = TRUE, exercise.setup = "pandas-setup"}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
 
 ```
 
-```{python freq-hint-1}
+```{python delete-row-hint-1}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-...pd.crosstab(...)
+borders_data = ...
 ```
 
-```{python freq-hint-2}
+```{python delete-row-hint-2}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"]...)
+borders_data = borders_data[...]
 ```
 
-```{python freq-hint-3}
+```{python delete-row-hint-3}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-print(crosstab_hospitalcode_sex)
+borders_data = borders_data[borders_data[...] != ...]
 ```
 
-```{python freq-solution}
+```{python delete-row-solution}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-crosstab_hospitalcode_sex = pd.crosstab(
-  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
-
-print(crosstab_hospitalcode_sex)
+borders_data = borders_data[borders_data['Sex'] != 'Male']
 ```
 
-```{python freq-check}
+```{python delete-row-check}
 grade_code()
 ```
 
