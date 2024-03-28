@@ -470,16 +470,21 @@ To begin efficiently locating and manipulating data, it would be beneficial to b
 
 The `loc` and `iloc` attributes are used for indexing, which allows for the locating of data from a dataframe based on row and column labels/indexes.
 
-`loc` - Label-based indexing (such as Hospital Codes, Names, etc.).
+`loc` - Label-based indexing (such as Hospital Codes, Names, etc.). </br>
 `iloc` - Integer-based indexing (remember Python indexes count from 0).
 
 By default, `loc` and `iloc` locates row indexes, instead of column indexes.
 
-`<df_name>.loc['<row_label>']` will select the first row with row_label as the label index.
+`<df_name>.loc['<row_label>']` will select the first row with row_label as the label index.</br>
 `<df_name>.iloc['<row_index_label>']` will select the row at index == row_index_label.
 
 
 This does not mean the location attributes are isolated to only locating rows - in fact, the real power of the location attributes is in its ability to freely locate relevant rows, columns, values, etc.
+
+It would further be helpful to remember that in some methods, the `axis` stated will indicate whether it is targetting a row or a column.
+
+`axis = 0` = row </br>
+`axis = 1` = column
 
 In the next few sections, we will see how useful the location attributes can be.
 
@@ -614,7 +619,7 @@ When adding a new row, you can first create a dictionary, where `keys` (column n
 
 Then, you can append the new row into the dataframe.
 
-`<df_name> = <df_name>.append(new_row_data)`
+* `<df_name> = <df_name>.append(new_row_data)`
 
 If you want to leave the value blank, you can input `None` into the row_value.
 
@@ -739,7 +744,7 @@ grade_code()
 ```
 
 
-##Wrangle – Part 2
+## Wrangle – Part 2
 
 ### Manipulate Strings
 
@@ -747,7 +752,7 @@ There are a number of ways to manipulate strings in Python. Here are a few metho
 
 * Split values at a delimiter: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.split('<delimiter>')`
 
-*Example: `borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')`
+* Example: `borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')`
 
 After the above line of code, if you `print(borders_data)`, you will see that all the values in the column `ManagementofPatient` has been split at the value 'a'.
 
@@ -801,9 +806,118 @@ borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H',
 grade_code()
 ```
 
+### Group By
+
+The `groupby()` function in Pandas allows us to split a Dataframe into group based on one or more keys, such as column values, and then perform operations on them, such as aggregations or transformations.
+
+* `<dataframe>.groupby('<column_name>')`
+
+Read in the `borders_inc_age` csv. Then, apply the `groupby()` function to the `HospitalCode` column.
+
+```{python groupby, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python groupby-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.groupby('HospitalCode')
+```
+
+```{python groupby-check}
+grade_code()
+```
+
+
 ### Aggregate Dataframe
 
+With the `groupby()` function, we can apply the aggregate `agg()` function in conduct operations on specific columns.
+
+* `<grouped_variable>.agg({<'column'> : <'function'>})`
+
+Multiple operations can also be carried out.
+
+* `<grouped_variable>.agg({<'column'> : [<'function1'>, <'function2'>,<'function3'>]})`
+
+Multiple columns can aggregated.
+
+* `<grouped_variable>.agg({<'column1'> : [<'function1'>, <'function2'>,<'function3'>],<'column2'> : [<'function1'>, <'function2'>,<'function3'>]})`
+
+For example, let's store the above `borders_data.groupby('HospitalCode')` into a variable called `grouped_by_hospital_code`. 
+
+We can now find the `mean`, `max`, `count` and `sum` of the `LengthOfStay` variables, grouped by `HospitalCode`.
+
+* `grouped_by_hospital_code.agg({'LengthOfStay': ['mean','max','count','sum']})`
+
+We could also more easily use the `describe()` function within the `agg()` function detailed above.
+
+Give that a go: Read in the `borders_inc_age` csv file, then group by `HospitalCode`, storing that into a variable called `grouped_by_hospital_code`. Aggregate using the method above. Use the `describe()` function to find important values from the `LengthOfStay` column. 
+
+```{python aggregate, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python aggregate-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+...
+```
+
+```{python aggregate-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  ...)
+```
+
+```{python aggregate-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  {'LengthOfStay':'describe'})
+
+```
+
+```{python aggregate-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  {'LengthOfStay':'describe'})
+
+```
+
+```{python aggregate-check}
+grade_code()
+```
+
+
 ### Merge Dataframe
+
+
+
+```{r join-diagrams-overview, echo=FALSE, fig.align='center', out.width="100%"}
+knitr::include_graphics("images/join_python.png")
+```
+
 
 ## Help & Feedback
 
