@@ -629,7 +629,7 @@ If you want to leave the value blank, you can input `None` into the row_value.
 This will create a new column with all the rows populated by the row_value.
 
 
-Read in the borders_inc_age file. Create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows.
+Read in the `borders_inc_age` csv file. Create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows.
 
 ```{python new-row, exercise = TRUE, exercise.setup = "pandas-setup"}
 
@@ -683,7 +683,7 @@ You can also delete rows based on their index and row_label by slicing the locat
 
 * Removing the first row: `<df_name> = <df_name>.iloc[1:]` 
 
-If we want to remove only the 2nd row using the same method, you would need to using locate the specific rows you want to keep, and append them together. 
+If we want to remove only the 2nd row using the same method, you would need to locate the specific rows you want to keep, and append them together. 
 
 * Removing the second row: `<df_name> = <df_name>.iloc[:1].append(<df_name>.iloc[2:]`
 
@@ -783,14 +783,12 @@ borders_data['HospitalCode'] = ...
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 
-
 borders_data['HospitalCode'] = borders_data['HospitalCode']...
 ```
 
 ```{python manipulate-string-hint-3}
 
 borders_data = pd.read_csv("data/borders_inc_age.csv")
-
 
 borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
 ```
@@ -805,6 +803,113 @@ borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H',
 ```{python manipulate-string-check}
 grade_code()
 ```
+
+### Recode
+
+Another way to recode data which offers more flexibility is by using the `loc` attribute.
+
+* `<df_name>.loc[<df_name>['<column_name>'] == <existing_value>, '<column_name>'] = <new_value>`
+
+This method uses the boolean operator `==`, which means **equal to**.
+
+This operator can be substituted with others.
+
+For example, in the case that you wish to find all the values which are less than `5` in a given column, and replace them with `Small`, you would code the following:
+
+* `data_frame.loc[data_frame['column1'] < 5, 'column1'] = 'Small'`
+
+As you can imagine, this methods affords a great level of versatility in data analysis.
+
+In the exercise below, read in the `borders_inc_age` csv file, and recode all instances of `B120H` in the `HospitalCode` column to `Recoded`.
+
+
+```{python recode, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python recode-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data[...] = ...
+```
+
+```{python recode-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == ..., ...] = 'Replaced'
+```
+
+```{python recode-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
+```
+
+```{python recode-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
+```
+
+```{python recode-check}
+grade_code()
+```
+
+### Rename
+
+Renames specific columns in a data frame:
+
+* `<data_frame>.rename(columns={'<old_column_name>':'<new_column_name>'})`
+
+The column `HospitalCode` in `borders_data` doesn't follow the style guide, rename it to `Hospital_Code`. 
+
+
+```{python rename, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python rename-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(...)
+```
+
+```{python rename-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={...})
+```
+
+```{python rename-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
+```
+
+```{python rename-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
+```
+
+```{python rename-check}
+grade_code()
+```
+
 
 ### Group By
 
@@ -917,6 +1022,78 @@ grade_code()
 ```{r join-diagrams-overview, echo=FALSE, fig.align='center', out.width="100%"}
 knitr::include_graphics("images/join_python.png")
 ```
+
+
+* `left` - taking all records from the "left", `data_frame_1`, and adding matched records from the "right", `data_frame_2`, introducing `NaN` where the "right", `data_2` had no matching records
+* `right` - taking all records from the "right", `data_frame_2`, and adding matched records from the "left", `data_frame_1`, introducing `NaN` where the "left", `data_frame_1` had no matching records
+* `inner` - producing only records where there were matches on both given data sets
+* `full` - retaining all records from both data sets and introducing `na` on either one where there was no matching records
+
+By default, the merge type will be `inner` unless stated otherwise.
+
+You define the merge/join type by defining the `how = '<type>'`.
+
+You should further define what common columns/variables the data frames should merge `on` by defining the `on = ['<insert_column>']`
+
+* `<data_frame_1>.merge(<data_frame_2>, how = '<join_type>', on = ['<insert_column_1>' , '<insert_column_2>'])`
+
+2 new data-sets have been loaded, `baby5` and `baby6`, these have common variables `FAMILYID` and `DOB`. Using a `left` join, merge them together. 
+
+
+```{python merge, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+
+
+```
+
+```{python merge-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(...)
+
+```
+
+```{python merge-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = '...', on = [...])
+
+```
+
+```{python merge-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
+
+```
+
+```{python merge-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
+
+```
+
+```{python merge-check}
+grade_code()
+```
+
 
 
 ## Help & Feedback
