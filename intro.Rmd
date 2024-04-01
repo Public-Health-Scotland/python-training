@@ -410,6 +410,7 @@ grade_code()
 * Crosstab: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"])`
 * Crosstab & Add Col/Row Totals: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"], margins = True)`
 tab
+
 Create a crosstab for `HospitalCode` and `Sex`, add column and row totals, store the table in a variable, and print it out. Use the hint button if you need some help.
 
 ```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
