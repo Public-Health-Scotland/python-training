@@ -28,6 +28,7 @@ tutorial_options(
 )
 ```
 
+
 ```{python pandas-setup, include = FALSE, eval = FALSE}
 # Import pandas library
 import pandas as pd 
@@ -56,6 +57,33 @@ Welcome to an introduction to python. This course is designed as a self-led intr
 ### What is Python?
 
 Python is a powerful general purpose programming language with widespread use in many application domains. Python is open source and free to use, and available for all major operating systems.
+
+### How does Python run?
+
+Traditionally, when a Python script is run, the entire script is interpreted and run from the top down. 
+
+```{python runtime, eval = FALSE, echo = TRUE}
+a = 15
+b = 10
+c = a + b 
+print(c)
+```
+
+When the above Python script is run, the entire script will be run from the top down, resulting in an output of `25`.
+
+There are a number of advantages to having Python scripts run this way. To name a few:
+
+* The script has a sequential flow
+* It is easier to debug
+* It is clearer and more readable
+
+However, there are a number of ways to run individual lines of code within a Python script, should that be preferred. In this course, we will touch upon `Jupyter Notebook` in the *IDE* section, where this can be accomplished. 
+
+
+
+## IDE
+
+Within this section, we will cover two IDEs which can be used to create and run Python scripts.
 
 ### Jupyter Notebook
 
@@ -158,6 +186,9 @@ knitr::include_graphics("images/markdown-example2.PNG")
 #### Python Library
 
 Python library is a collection of functions and methods that allows you to perform lots of actions without writing your own code. For example, “pandas” is a Python library for data manipulation and analysis, which is used a lot in this training guidance. 
+
+
+### VS Code
 
 ## Foundations
 
@@ -355,6 +386,8 @@ print(hello_world)
 * `mean()` and `median()` are passed arrays of values (usually from a data frame) to return the mean and median value.
 
 * `describe()` returns all summary statistics based on a given array.
+
+For example, `<df_name>["<col_name>"].median()` will generate the `median` value of the values within the stated column.
 
 In the exercise below, you have the borders data-set loaded as `borders_data`. See if you can get the mean value for `LengthOfStay`, store it in a variable, and print that variable. Use the hint button if you need some help.
 

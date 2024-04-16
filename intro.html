@@ -322,11 +322,15 @@ string e.g. for tabs and for newlines.</p>
 <div class="tutorial-exercise" data-label="strings2" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0"
 data-pipe="|&gt;">
-<pre class="text"><code>multiline = &#39;&#39;&#39;White space is
-preserved
-in multiline strings.&#39;&#39;&#39;
+<pre class="text"><code>def greet(name):
+    print(f&quot;Hello, {name}!&quot;)
 
-multiline</code></pre>
+def main():
+    user_name = input(&quot;Enter your name: &quot;)
+    greet(user_name)
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"python","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;Python&quot;}\">Python Code<\/span>"}</script>
 </div>
 <p>The <code>print()</code> function interprets these escape characters
@@ -562,11 +566,11 @@ print(mean_value)</code></pre>
 <code>pd.crosstab(&lt;df_name&gt;["&lt;col_1_name&gt;"], &lt;df_name&gt;["&lt;col_2_name&gt;"])</code></li>
 <li>Crosstab &amp; Add Col/Row Totals:
 <code>pd.crosstab(&lt;df_name&gt;["&lt;col_1_name&gt;"], &lt;df_name&gt;["&lt;col_2_name&gt;"], margins = True)</code>
-tab Create a crosstab for <code>HospitalCode</code> and
-<code>Sex</code>, add column and row totals, store the table in a
-variable, and print it out. Use the hint button if you need some
-help.</li>
+tab</li>
 </ul>
+<p>Create a crosstab for <code>HospitalCode</code> and <code>Sex</code>,
+add column and row totals, store the table in a variable, and print it
+out. Use the hint button if you need some help.</p>
 <div class="tutorial-exercise" data-label="freq" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0"
 data-pipe="|&gt;">
@@ -1324,7 +1328,7 @@ learnr:::store_exercise_cache(structure(list(label = "strings2", global_setup = 
 "library(reticulate)", "", "knitr::opts_chunk$set(echo = FALSE)", 
 "", "tutorial_options(", "  exercise.checker = gradethis::grade_learnr", 
 ")"), chunk_opts = list(label = "setup", include = FALSE)), setup = NULL, 
-    chunks = list(list(label = "strings2", code = "multiline = '''White space is\npreserved\nin multiline strings.'''\n\nmultiline", 
+    chunks = list(list(label = "strings2", code = "def greet(name):\n    print(f\"Hello, {name}!\")\n\ndef main():\n    user_name = input(\"Enter your name: \")\n    greet(user_name)\n\nif __name__ == \"__main__\":\n    main()\n", 
         opts = list(label = "\"strings2\"", exercise = "TRUE", 
             engine = "\"python\""), engine = "python")), code_check = NULL, 
     error_check = NULL, check = NULL, solution = NULL, tests = NULL, 
@@ -1346,9 +1350,11 @@ learnr:::store_exercise_cache(structure(list(label = "strings2", global_setup = 
         engine = "python", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "strings2", exercise = TRUE, code = c("multiline = '''White space is", 
-        "preserved", "in multiline strings.'''", "", "multiline"
-        ), out.width.px = 624, out.height.px = 384, params.src = "strings2, exercise = TRUE, engine=\"python\"", 
+        label = "strings2", exercise = TRUE, code = c("def greet(name):", 
+        "    print(f\"Hello, {name}!\")", "", "def main():", 
+        "    user_name = input(\"Enter your name: \")", "    greet(user_name)", 
+        "", "if __name__ == \"__main__\":", "    main()", ""), 
+        out.width.px = 624, out.height.px = 384, params.src = "strings2, exercise = TRUE, engine=\"python\"", 
         exercise.df_print = "paged"), engine = "python", version = "4"), class = c("python", 
 "tutorial_exercise")))
 </script>
@@ -1751,16 +1757,16 @@ learnr:::store_exercise_cache(structure(list(label = "delete-column", global_set
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "example-quiz-1", 
     question = structure("[Question]", html = TRUE, class = c("html", 
-    "character")), answers = list(structure(list(id = "lnr_ans_5265b60", 
+    "character")), answers = list(structure(list(id = "lnr_ans_cd78b5d", 
         option = "[Incorrect answer]", value = "[Incorrect answer]", 
         label = structure("[Incorrect answer]", html = TRUE, class = c("html", 
         "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c597bf3", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_e38e77f", 
         option = "[Incorrect answer with feedback]", value = "[Incorrect answer with feedback]", 
         label = structure("[Incorrect answer with feedback]", html = TRUE, class = c("html", 
         "character")), correct = FALSE, message = structure("[Specific feedback.]", html = TRUE, class = c("html", 
         "character")), type = "literal"), class = c("tutorial_question_answer", 
-    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d5cddfa", 
+    "tutorial_quiz_answer")), structure(list(id = "lnr_ans_1cd9b05", 
         option = "[Correct answer]", value = "[Correct answer]", 
         label = structure("[Correct answer]", html = TRUE, class = c("html", 
         "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
@@ -1772,7 +1778,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
     "character")), message = NULL, post_message = NULL), ids = list(
         answer = "example-quiz-1-answer", question = "example-quiz-1"), 
     loading = NULL, random_answer_order = TRUE, allow_retry = TRUE, 
-    seed = 910182803.076163, options = list()), class = c("learnr_radio", 
+    seed = 820330740.618004, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
 
