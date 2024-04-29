@@ -3,11 +3,10 @@ title: "Intro to Python"
 output: 
   learnr::tutorial:
     css: "css/style.css"
-    progressive: false
+    progressive: true
     allow_skip: true
 runtime: shiny_prerendered
 ---
-
 
 ```{r setup, include=FALSE}
 # Author: Tina Fu
@@ -17,8 +16,12 @@ runtime: shiny_prerendered
 # See here for learnr package documentation: https://rstudio.github.io/learnr/
 
 # Include packages here that are required throughout the training
+
+#install.packages("learnr")
 library(learnr)         # Required to build the Shiny app
-# library(gradethis)      # Required for specific code checking and specific feedback
+#install.packages("gradethis")
+library(gradethis)      # Required for specific code checking and specific feedback
+#install.packages("reticulate")
 library(reticulate)
 
 knitr::opts_chunk$set(echo = FALSE)
@@ -187,12 +190,41 @@ knitr::include_graphics("images/markdown-example2.PNG")
 
 Python library is a collection of functions and methods that allows you to perform lots of actions without writing your own code. For example, “pandas” is a Python library for data manipulation and analysis, which is used a lot in this training guidance. 
 
-
-### VS Code
-
 ## Foundations
 
-This section will walk you through the key data types and structures necessary to hit the ground running and start using Python productively. 
+This section will walk you through some of the foundational knowledge of Python, including structure, style, and key data types.
+
+### Structure
+
+**Indentation** - where indentation in other programming languages are included as a style preference, indentation in Python is extremely important, as it indicates what blocks of code should be run. 
+
+Without proper indentations, your code will not run. Try to run the following code with improper indentation:
+
+```{python indentation1, exercise=TRUE}
+if 1 < 10:
+print("One is less than ten.")
+```
+
+Note the syntax error which was shown:
+
+Now run the code with the proper indentation:
+
+```{python indentation2, exercise=TRUE}
+if 1 < 10:
+  print("One is less than ten.")
+```
+
+Indentation not only affords proper functionality, but it also enhances readability and comprehension for yourself, and future co-developers. 
+
+### Style
+
+**Naming** - variables and filenames should have meaningful names in *`snake_case`* format, preferring all lower case.
+
+<div>
+```{r echo=FALSE, fig.align='center', out.width="100%"}
+knitr::include_graphics("images/r_coding_cases.png")
+```
+</div>
 
 ### Numbers
 
@@ -260,6 +292,27 @@ print('Hello' + ' ' + 'World' * 4)
 print('Hello' + (' ' + 'World') * 4)
 ```
 
+### Boolean
+
+Booleans represent either `True` or `False`.
+
+When Python code is run, expressions can be compared and a Boolean answer can be returned:
+
+```{python boolean1, exercise = TRUE}
+print(5 == 5)
+print(10 == 2)
+print(5 < 4)
+```
+
+If a value has some sort of content, it is normally evaluated as true:
+
+```{python boolean2, exercise = TRUE}
+bool("Hi")
+bool([])
+```
+
+Note that the empty `list` in the second expression returned `False`.
+
 ### Data Types and Type Conversion
 
 The `type()` function can be used to query the type of a Python object, and any type conversion can be performed by using the appropriate function e.g. `int()` for integer, `str()` for string, and `float()` for a floating point number. 
@@ -274,6 +327,269 @@ myfloat = float(myint) # Convert myint to a floating point number
 mystr
 myfloat
 ```
+
+## Data Structures
+
+There are various data structures which are built into Python. Some of the main ones are:
+
+#### Lists
+
+- Lists are ordered collections of items.
+- They are mutable, meaning you can add, remove, or modify elements.
+- Lists can contain elements of different data types.
+
+```{python list, exercise = TRUE}
+my_list = [1, 2, 'apple', 'banana']
+print(my_list)
+```
+
+#### Tuples
+
+- Tuples are ordered collections of items, similar to lists.
+- Tuples are immutable - once they are created, the elements cannot be changed.
+- Tuples can contains elements of different data types.
+
+```{python tuples, exercise = TRUE}
+my_tuple = (1, 2, 'apple', 'banana')
+print(my_tuple)
+```
+
+#### Dictionaries
+
+- Dictionaries are unordered collections of key-value pairs.
+- They are mutable, and each key within a dictionary must be unique.
+- Dictionaries are used when you need to associate some data (value) with a specific identifier (key).
+
+
+```{python dictionaries, exercise = TRUE}
+my_dict = {'name': 'John', 'age': 30, 'city': 'New York'}
+print(my_dict)
+```
+
+You can then retrieve associate values as such:
+
+```{python dictionaries2, exercise = TRUE}
+my_dict = {'name': 'John', 'age': 30, 'city': 'New York'}
+
+name_value = my_dict['name']
+print(name_value)
+```
+
+#### Set
+
+- Sets are unordered collections of unique items.
+- They are mutable, but their elements must be immutable.
+- Sets are useful for operations like finding intersections, unions, and differences between collections.
+
+```{python sets, exercise = TRUE}
+my_set = {1, 2, 3, 4, 5}
+print(my_set)
+```
+
+#### Strings
+
+- Strings are sequences of characters.
+- They are immutable, meaning you cannot change the characters in a string once it's created.
+- Strings support various operations and methods for text manipulation.
+
+
+```{python stringexample, exercise = TRUE}
+my_string = 'Hello, World!'
+print(my_string)
+```
+
+## Functions
+
+In Python, functions are a block of organised and reusable code which performs a specific task.
+
+Functions can be called from anywhere within the script, and can be stored anywhere within the script - **however**, it is custom convention to store functions are the top, or near the top, of the script in order to enhance readability and maintenance of the code. 
+
+### Structure
+
+Functions are made up of the:
+
+* Defined keyword `def`
+* Function name
+* `()` parentheses which may include parameters.
+* Function body
+
+
+```{python function1, eval = FALSE, echo = TRUE}
+def <function_name>():
+  function_body
+
+```
+
+Example:
+
+
+```{python function2, exercise=TRUE}
+def greet():
+  print("Hello!")
+```
+
+When you run the above code, you will see that nothing is outputted - this is because the function has not been called.
+
+
+```{python function3, exercise=TRUE}
+def greet():
+  print("Hello!")
+
+greet()
+```
+
+### Parameters and Arguments
+
+Parameters are variables which are listed inside the parentheses in the function definition.
+
+They are placeholders are actual values which will be passed into the function when it is called.
+
+The values passed into a function are called arguments. 
+
+
+```{python function4, exercise=TRUE}
+def greet(name):
+  print("Hello, " + name + "!")
+  
+greet("Bob")
+```
+
+You can also pass through multiple arguments:
+
+
+```{python function5, exercise=TRUE}
+def add(a,b,c):
+  print(a + b + c)
+  
+result = add(1,2,3)
+```
+
+### Return
+
+The return statement can optionally be used to return the data back to the caller.
+
+```{python function6, exercise=TRUE}
+def add(a,b,c):
+  return a + b + c
+  
+result = add(1,2,3)
+print(result)
+```
+
+
+## Control Flow & Iteration
+
+As is the case in most other programming languages, control flow is where decisions are made, and iteration is where processes are repeated. 
+
+### Comparison Operators
+
+Here are the most commonly used comparison operators used in conditional statements in Python:
+
+```{r, echo = FALSE}
+operators_table <- data.frame(
+  "Operator" = c("`>` `<`", "`==` `!=`", "`<=` `>=`","`and` `or`"), 
+  "Description" = c("Greater than, Less than", "Equal to, Not Equal to", "Less than or equal to, Greater than or equal to", "And, Or")
+)
+
+knitr::kable(operators_table)
+```
+
+
+### Control Flow - If
+
+`if` is the most common comparison operator used in Python.
+
+```{python if1, exercise=TRUE}
+if 5 == 5:
+  print("5 is equal to 5")
+
+if 5 == 4 or 5 == 5:
+  print("Either 5 is equal to 4, or 5 is equal to 5")
+
+if 6 <= 6:
+  print("6 is less than or equal to 6")
+```
+
+There are some further statements when using `if` that you should be familiar with:
+
+- `elif` is short for *else if* and is used for multiple `if` conditions
+- `else` is executed if the preceding `if` and `elif` statements are false
+
+
+```{python if2, exercise=TRUE}
+def check_if_number_is_1_2_or_3(number):
+  if number == 1:
+    print("The number is 1")
+  elif number == 2:
+    print("The number is 2")
+  else:
+    print("The number is 3")
+
+check_if_number_is_1_2_or_3(3)
+```
+
+### For loop
+
+For loops are used for iteration.
+
+There are multiple ways to use for loops.
+
+#### Iterating over a list:
+
+
+```{python forloop1, exercise=TRUE}
+list_of_fruits = ["apple","banana","cherry"]
+
+for fruits in list_of_fruits:
+  print(fruits)
+```
+
+#### Using Enumerate:
+
+You can also use `enumerate` to iterate over a sequence and get the index position of each item also:
+
+```{python forloop2, exercise=TRUE}
+list_of_fruits = ["apple","banana","cherry"]
+
+for index, fruits in enumerate(list_of_fruits):
+  print(index,fruits)
+```
+
+
+#### Iterating over a string:
+
+
+```{python forloop3, exercise=TRUE}
+for char in "Python":
+    print(char)
+```
+
+#### Iterating over a range:
+
+`range` in Python determines the position of the value, rather than the value itself. 
+
+Remember that positions in Python begin at position `0`.
+
+```{python forloop4, exercise=TRUE}
+
+for i in range(5):
+    print(i)
+
+```
+
+#### Nested Loops
+
+```{python forloop5, exercise=TRUE}
+
+adjective = ["red", "big", "tasty"]
+fruits = ["apple", "banana", "cherry"]
+
+for x in adjective:
+    for y in fruits:
+        print(x, y)
+
+```
+
 
 ## Importing and Exporting Datasets
 
@@ -378,6 +694,7 @@ hello_world <- "Hello World"
 
 print(hello_world)
 ```
+
 
 ## Explore
 
