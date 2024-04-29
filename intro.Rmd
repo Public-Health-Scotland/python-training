@@ -32,7 +32,7 @@ tutorial_options(
 ```
 
 
-```{python pandas-setup, include = FALSE, eval = FALSE}
+```{python pandas-setup, include = FALSE, eval = TRUE}
 # Import pandas library
 import pandas as pd 
 
@@ -85,8 +85,6 @@ However, there are a number of ways to run individual lines of code within a Pyt
 
 
 ## IDE
-
-Within this section, we will cover two IDEs which can be used to create and run Python scripts.
 
 ### Jupyter Notebook
 
