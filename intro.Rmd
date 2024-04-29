@@ -32,7 +32,7 @@ tutorial_options(
 ```
 
 
-```{python pandas-setup, include = FALSE, eval = TRUE}
+```{python pandas-setup, include = FALSE, eval = FALSE}
 # Import pandas library
 import pandas as pd 
 
