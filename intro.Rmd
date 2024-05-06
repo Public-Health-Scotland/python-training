@@ -3,7 +3,7 @@ title: "Intro to Python"
 output: 
   learnr::tutorial:
     css: "css/style.css"
-    progressive: false
+    progressive: true
     allow_skip: true
 runtime: shiny_prerendered
 ---
@@ -16,8 +16,12 @@ runtime: shiny_prerendered
 # See here for learnr package documentation: https://rstudio.github.io/learnr/
 
 # Include packages here that are required throughout the training
+
+#install.packages("learnr")
 library(learnr)         # Required to build the Shiny app
-# library(gradethis)      # Required for specific code checking and specific feedback
+#install.packages("gradethis")
+library(gradethis)      # Required for specific code checking and specific feedback
+#install.packages("reticulate")
 library(reticulate)
 
 knitr::opts_chunk$set(echo = FALSE)
@@ -27,7 +31,8 @@ tutorial_options(
 )
 ```
 
-```{python pandas-setup, include = FALSE}
+
+```{python pandas-setup, include = FALSE, eval = FALSE}
 # Import pandas library
 import pandas as pd 
 
@@ -55,6 +60,31 @@ Welcome to an introduction to python. This course is designed as a self-led intr
 ### What is Python?
 
 Python is a powerful general purpose programming language with widespread use in many application domains. Python is open source and free to use, and available for all major operating systems.
+
+### How does Python run?
+
+Traditionally, when a Python script is run, the entire script is interpreted and run from the top down. 
+
+```{python runtime, eval = FALSE, echo = TRUE}
+a = 15
+b = 10
+c = a + b 
+print(c)
+```
+
+When the above Python script is run, the entire script will be run from the top down, resulting in an output of `25`.
+
+There are a number of advantages to having Python scripts run this way. To name a few:
+
+* The script has a sequential flow
+* It is easier to debug
+* It is clearer and more readable
+
+However, there are a number of ways to run individual lines of code within a Python script, should that be preferred. In this course, we will touch upon `Jupyter Notebook` in the *IDE* section, where this can be accomplished. 
+
+
+
+## IDE
 
 ### Jupyter Notebook
 
@@ -87,7 +117,7 @@ You will see the interface looks like this. There are three main tabs in Jupyter
 - **Clusters** For using IPython in parallel with your cluster (beyond the scope of this training guidance)
 
 ```{r startsession, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/python-pwb-startsession.png")
+knitr::include_graphics("images/python-pwb-startsession.PNG")
 ```
 
 </br>
@@ -99,7 +129,7 @@ knitr::include_graphics("images/python-pwb-newnb.png")
 ```
 
 ```{r blanknb, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/python-pwb-blanknb.png")
+knitr::include_graphics("images/python-pwb-blanknb.PNG")
 ```
 
 </br>
@@ -117,7 +147,7 @@ Jupyter notebook is a modal editor which means that the keyboard does different 
 - **Edit mode** - it is indicated by a green cell border and left sidebar, and a prompt showing in the editor area: 
 
 ```{r editmode, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/edit-mode.png")
+knitr::include_graphics("images/edit-mode.PNG")
 ```
 
 When a cell is in edit mode, you can type things such as Python codes into the cell, like a normal text editor. Enter edit mode by pressing Enter or using the mouse to click on a cell’s editor area. 
@@ -125,7 +155,7 @@ When a cell is in edit mode, you can type things such as Python codes into the c
 - **Command mode** - Once you click somewhere else outside the cell or press “esc” on keyboard, the cell turns into Command mode. Command mode is indicated by a grey cell border and a blue sidebar:
 
 ```{r commandmode, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/command-mode.png")
+knitr::include_graphics("images/command-mode.PNG")
 ```
 
 When you are in command mode, you are able to edit the notebook as a whole, but not type into individual cells. Most importantly, in command mode, the keyboard is mapped to a set of shortcuts that let you perform notebook and cell actions efficiently. For example, if you are in command mode and you press C and V, you will copy and paste the current cell.
@@ -137,7 +167,7 @@ A full list of useful shortcuts is available by going to "Help > Keyboard Shortc
 Markdown text cells support plain text, Markdown and HTML. It will be useful to create headings, text instructions etc using markdown to organise the notebook like a written document. A cell can be changed from code mode to markdown mode by going to the top menu bar "Cell > Cell Type > Markdown". Or select “Markdown” from the dropdown list:
 
 ```{r markdown, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/markdown-menu.png")
+knitr::include_graphics("images/markdown-menu.PNG")
 ```
 
 Or press M while in Command Mode and highlighting the cell. 
@@ -145,13 +175,13 @@ Or press M while in Command Mode and highlighting the cell.
 Here is an example of typing some text in a markdown cell. You can use hash key “#” to indicate the size of heading, followed by a space and the text. 
 
 ```{r markdown-example1, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/markdown-example1.png")
+knitr::include_graphics("images/markdown-example1.PNG")
 ```
 
 Then press *Shift + Enter* to finish. 
 
 ```{r markdown-example2, fig.align='center', out.width="100%"}
-knitr::include_graphics("images/markdown-example2.png")
+knitr::include_graphics("images/markdown-example2.PNG")
 ```
 
 #### Python Library
@@ -160,7 +190,39 @@ Python library is a collection of functions and methods that allows you to perfo
 
 ## Foundations
 
-This section will walk you through the key data types and structures necessary to hit the ground running and start using Python productively. 
+This section will walk you through some of the foundational knowledge of Python, including structure, style, and key data types.
+
+### Structure
+
+**Indentation** - where indentation in other programming languages are included as a style preference, indentation in Python is extremely important, as it indicates what blocks of code should be run. 
+
+Without proper indentations, your code will not run. Try to run the following code with improper indentation:
+
+```{python indentation1, exercise=TRUE}
+if 1 < 10:
+print("One is less than ten.")
+```
+
+Note the syntax error which was shown:
+
+Now run the code with the proper indentation:
+
+```{python indentation2, exercise=TRUE}
+if 1 < 10:
+  print("One is less than ten.")
+```
+
+Indentation not only affords proper functionality, but it also enhances readability and comprehension for yourself, and future co-developers. 
+
+### Style
+
+**Naming** - variables and filenames should have meaningful names in *`snake_case`* format, preferring all lower case.
+
+<div>
+```{r echo=FALSE, fig.align='center', out.width="100%"}
+knitr::include_graphics("images/r_coding_cases.png")
+```
+</div>
 
 ### Numbers
 
@@ -228,6 +290,27 @@ print('Hello' + ' ' + 'World' * 4)
 print('Hello' + (' ' + 'World') * 4)
 ```
 
+### Boolean
+
+Booleans represent either `True` or `False`.
+
+When Python code is run, expressions can be compared and a Boolean answer can be returned:
+
+```{python boolean1, exercise = TRUE}
+print(5 == 5)
+print(10 == 2)
+print(5 < 4)
+```
+
+If a value has some sort of content, it is normally evaluated as true:
+
+```{python boolean2, exercise = TRUE}
+bool("Hi")
+bool([])
+```
+
+Note that the empty `list` in the second expression returned `False`.
+
 ### Data Types and Type Conversion
 
 The `type()` function can be used to query the type of a Python object, and any type conversion can be performed by using the appropriate function e.g. `int()` for integer, `str()` for string, and `float()` for a floating point number. 
@@ -242,6 +325,269 @@ myfloat = float(myint) # Convert myint to a floating point number
 mystr
 myfloat
 ```
+
+## Data Structures
+
+There are various data structures which are built into Python. Some of the main ones are:
+
+#### Lists
+
+- Lists are ordered collections of items.
+- They are mutable, meaning you can add, remove, or modify elements.
+- Lists can contain elements of different data types.
+
+```{python list, exercise = TRUE}
+my_list = [1, 2, 'apple', 'banana']
+print(my_list)
+```
+
+#### Tuples
+
+- Tuples are ordered collections of items, similar to lists.
+- Tuples are immutable - once they are created, the elements cannot be changed.
+- Tuples can contains elements of different data types.
+
+```{python tuples, exercise = TRUE}
+my_tuple = (1, 2, 'apple', 'banana')
+print(my_tuple)
+```
+
+#### Dictionaries
+
+- Dictionaries are unordered collections of key-value pairs.
+- They are mutable, and each key within a dictionary must be unique.
+- Dictionaries are used when you need to associate some data (value) with a specific identifier (key).
+
+
+```{python dictionaries, exercise = TRUE}
+my_dict = {'name': 'John', 'age': 30, 'city': 'New York'}
+print(my_dict)
+```
+
+You can then retrieve associate values as such:
+
+```{python dictionaries2, exercise = TRUE}
+my_dict = {'name': 'John', 'age': 30, 'city': 'New York'}
+
+name_value = my_dict['name']
+print(name_value)
+```
+
+#### Set
+
+- Sets are unordered collections of unique items.
+- They are mutable, but their elements must be immutable.
+- Sets are useful for operations like finding intersections, unions, and differences between collections.
+
+```{python sets, exercise = TRUE}
+my_set = {1, 2, 3, 4, 5}
+print(my_set)
+```
+
+#### Strings
+
+- Strings are sequences of characters.
+- They are immutable, meaning you cannot change the characters in a string once it's created.
+- Strings support various operations and methods for text manipulation.
+
+
+```{python stringexample, exercise = TRUE}
+my_string = 'Hello, World!'
+print(my_string)
+```
+
+## Functions
+
+In Python, functions are a block of organised and reusable code which performs a specific task.
+
+Functions can be called from anywhere within the script, and can be stored anywhere within the script - **however**, it is custom convention to store functions are the top, or near the top, of the script in order to enhance readability and maintenance of the code. 
+
+### Structure
+
+Functions are made up of the:
+
+* Defined keyword `def`
+* Function name
+* `()` parentheses which may include parameters.
+* Function body
+
+
+```{python function1, eval = FALSE, echo = TRUE}
+def <function_name>():
+  function_body
+
+```
+
+Example:
+
+
+```{python function2, exercise=TRUE}
+def greet():
+  print("Hello!")
+```
+
+When you run the above code, you will see that nothing is outputted - this is because the function has not been called.
+
+
+```{python function3, exercise=TRUE}
+def greet():
+  print("Hello!")
+
+greet()
+```
+
+### Parameters and Arguments
+
+Parameters are variables which are listed inside the parentheses in the function definition.
+
+They are placeholders are actual values which will be passed into the function when it is called.
+
+The values passed into a function are called arguments. 
+
+
+```{python function4, exercise=TRUE}
+def greet(name):
+  print("Hello, " + name + "!")
+  
+greet("Bob")
+```
+
+You can also pass through multiple arguments:
+
+
+```{python function5, exercise=TRUE}
+def add(a,b,c):
+  print(a + b + c)
+  
+result = add(1,2,3)
+```
+
+### Return
+
+The return statement can optionally be used to return the data back to the caller.
+
+```{python function6, exercise=TRUE}
+def add(a,b,c):
+  return a + b + c
+  
+result = add(1,2,3)
+print(result)
+```
+
+
+## Control Flow & Iteration
+
+As is the case in most other programming languages, control flow is where decisions are made, and iteration is where processes are repeated. 
+
+### Comparison Operators
+
+Here are the most commonly used comparison operators used in conditional statements in Python:
+
+```{r, echo = FALSE}
+operators_table <- data.frame(
+  "Operator" = c("`>` `<`", "`==` `!=`", "`<=` `>=`","`and` `or`"), 
+  "Description" = c("Greater than, Less than", "Equal to, Not Equal to", "Less than or equal to, Greater than or equal to", "And, Or")
+)
+
+knitr::kable(operators_table)
+```
+
+
+### Control Flow - If
+
+`if` is the most common comparison operator used in Python.
+
+```{python if1, exercise=TRUE}
+if 5 == 5:
+  print("5 is equal to 5")
+
+if 5 == 4 or 5 == 5:
+  print("Either 5 is equal to 4, or 5 is equal to 5")
+
+if 6 <= 6:
+  print("6 is less than or equal to 6")
+```
+
+There are some further statements when using `if` that you should be familiar with:
+
+- `elif` is short for *else if* and is used for multiple `if` conditions
+- `else` is executed if the preceding `if` and `elif` statements are false
+
+
+```{python if2, exercise=TRUE}
+def check_if_number_is_1_2_or_3(number):
+  if number == 1:
+    print("The number is 1")
+  elif number == 2:
+    print("The number is 2")
+  else:
+    print("The number is 3")
+
+check_if_number_is_1_2_or_3(3)
+```
+
+### For loop
+
+For loops are used for iteration.
+
+There are multiple ways to use for loops.
+
+#### Iterating over a list:
+
+
+```{python forloop1, exercise=TRUE}
+list_of_fruits = ["apple","banana","cherry"]
+
+for fruits in list_of_fruits:
+  print(fruits)
+```
+
+#### Using Enumerate:
+
+You can also use `enumerate` to iterate over a sequence and get the index position of each item also:
+
+```{python forloop2, exercise=TRUE}
+list_of_fruits = ["apple","banana","cherry"]
+
+for index, fruits in enumerate(list_of_fruits):
+  print(index,fruits)
+```
+
+
+#### Iterating over a string:
+
+
+```{python forloop3, exercise=TRUE}
+for char in "Python":
+    print(char)
+```
+
+#### Iterating over a range:
+
+`range` in Python determines the position of the value, rather than the value itself. 
+
+Remember that positions in Python begin at position `0`.
+
+```{python forloop4, exercise=TRUE}
+
+for i in range(5):
+    print(i)
+
+```
+
+#### Nested Loops
+
+```{python forloop5, exercise=TRUE}
+
+adjective = ["red", "big", "tasty"]
+fruits = ["apple", "banana", "cherry"]
+
+for x in adjective:
+    for y in fruits:
+        print(x, y)
+
+```
+
 
 ## Importing and Exporting Datasets
 
@@ -346,6 +692,757 @@ hello_world <- "Hello World"
 
 print(hello_world)
 ```
+
+
+## Explore
+
+### Mean/Median & Summary
+
+* `mean()` and `median()` are passed arrays of values (usually from a data frame) to return the mean and median value.
+
+* `describe()` returns all summary statistics based on a given array.
+
+For example, `<df_name>["<col_name>"].median()` will generate the `median` value of the values within the stated column.
+
+In the exercise below, you have the borders data-set loaded as `borders_data`. See if you can get the mean value for `LengthOfStay`, store it in a variable, and print that variable. Use the hint button if you need some help.
+
+```{python mean, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data
+```
+
+```{python mean-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data["LengthOfStay"]
+```
+
+
+```{python mean-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data["LengthOfStay"].mean()
+```
+
+
+```{python mean-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+mean_value = borders_data["LengthOfStay"].mean()
+
+print(mean_value)
+```
+
+```{python mean-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+mean_value = borders_data["LengthOfStay"].mean()
+
+print(mean_value)
+```
+
+```{python mean-check}
+grade_code()
+```
+
+
+### Frequencies & Crosstabs
+
+* Frequency: `<df_name>["<col_name>").value_counts()]`
+* Crosstab: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"])`
+* Crosstab & Add Col/Row Totals: `pd.crosstab(<df_name>["<col_1_name>"], <df_name>["<col_2_name>"], margins = True)`
+tab
+
+Create a crosstab for `HospitalCode` and `Sex`, add column and row totals, store the table in a variable, and print it out. Use the hint button if you need some help.
+
+```{python freq, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python freq-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+...pd.crosstab(...)
+```
+
+```{python freq-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"]...)
+```
+
+```{python freq-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
+print(crosstab_hospitalcode_sex)
+```
+
+```{python freq-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+crosstab_hospitalcode_sex = pd.crosstab(
+  borders_data["HospitalCode"], borders_data["Sex"], margins = True)
+
+print(crosstab_hospitalcode_sex)
+```
+
+```{python freq-check}
+grade_code()
+```
+
+## Wrangle – Part 1
+
+For the next sections, we will focus on using the pandas module manipulate data and data frames.
+
+
+### Location
+
+There are multiple ways to wrangle data in Python - some are more straightforward than others.
+
+To begin efficiently locating and manipulating data, it would be beneficial to become familiar with the concept of locating data in a dataframe.
+
+The `loc` and `iloc` attributes are used for indexing, which allows for the locating of data from a dataframe based on row and column labels/indexes.
+
+`loc` - Label-based indexing (such as Hospital Codes, Names, etc.). </br>
+`iloc` - Integer-based indexing (remember Python indexes count from 0).
+
+By default, `loc` and `iloc` locates row indexes, instead of column indexes.
+
+`<df_name>.loc['<row_label>']` will select the first row with row_label as the label index.</br>
+`<df_name>.iloc['<row_index_label>']` will select the row at index == row_index_label.
+
+
+This does not mean the location attributes are isolated to only locating rows - in fact, the real power of the location attributes is in its ability to freely locate relevant rows, columns, values, etc.
+
+It would further be helpful to remember that in some methods, the `axis` stated will indicate whether it is targetting a row or a column.
+
+`axis = 0` = row </br>
+`axis = 1` = column
+
+In the next few sections, we will see how useful the location attributes can be.
+
+
+### Select / Slice Out Columns
+
+By far, the most straightforward way to select a column is by the following method:
+
+* Selecting/Slicing Out a column: `<df_name>["<col_name>"]`
+
+However, by using `loc` and `iloc`, we can start to specify further:
+
+* Selecting/Slicing Out a column: `<df_name>.loc["<row_index>","<column_index>"]`
+
+* Example: `borders_data.loc[:,"Specialty"]` will obtain all the rows from the `Specialty` column.
+
+You may be wondering why using the `loc` attribute is helpful here when the first method is much more simple.
+
+Using `loc`, you have the ability to select specific rows within that column
+
+* Example: `borders_data.loc[0:2,"HospitalCode"]` will obtain the first 3 rows from the `HospitalCode` column.
+
+Read in the data stored in the borders_inc_age csv file, select/slice out the entire `HospitalCode` column using pandas, and print out the selected column.
+
+```{python select, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+column_hospital_code = 
+
+```
+
+```{python select-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+column_hospital_code = borders_data.loc
+```
+
+```{python select-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+column_hospital_code = borders_data.loc[:,]
+```
+
+```{python select-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+column_hospital_code = borders_data.loc[:,'HospitalCode']
+
+print(column_hospital_code)
+```
+
+```{python select-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+column_hospital_code = borders_data.loc[:,'HospitalCode']
+
+print(column_hospital_code)
+```
+
+```{python select-check}
+grade_code()
+```
+
+
+### Select Rows
+
+The pandas library has multiple way to select rows, depending on your criteria.
+
+* Select Rows by index: `<df_name>.iloc[<index_number>]']`
+* Example: `borders_data.iloc[0]` *This will show the first row of the dataframe *
+
+* Select Rows which have a specific value in a specific column: `<df_name>[<df_name>['<column_name>'] == '<row_label>']`
+* Example: `borders_data[borders_data['HospitalCode'] == 'B120H']` *This will show all the rows which have `B120H` in the `HospitalCode` column *
+
+* Select Rows by index: `<df_name>.loc['<row_label>']']`
+* Example: `borders_data.loc['row_label']` *This will locate the first instance of the row with row_label as the label index - please note, this csv file does not have row labels*
+
+Read in the borders_inc_age csv file, and select all the rows with `Specialty == A1`.
+
+```{python select-row, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python select-row-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+rows_of_a1 = borders_data[...]
+```
+
+```{python select-row-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+rows_of_a1 = borders_data[borders_data['...']...]
+```
+
+```{python select-row-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
+```
+
+```{python select-row-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
+```
+
+```{python select-row-check}
+grade_code()
+```
+
+### Add a New Row/Column
+
+Adding a new row/column is straightforward.
+
+When adding a new row, you can first create a dictionary, where `keys` (column names) and `values` (corresponding values in the new row) are mapped together.
+
+* Create dictionary of mapped keys (columns) and values (row values): 
+`new_row_data = {'<column_name>':'<row_value>','<column_name>':'<row_value>','<column_name>':'<row_value>'}`
+
+Then, you can append the new row into the dataframe.
+
+* `<df_name> = <df_name>.append(new_row_data)`
+
+If you want to leave the value blank, you can input `None` into the row_value.
+
+
+* Add new column: `<df_name>['<new_column_name>'] = <row_value>`
+
+This will create a new column with all the rows populated by the row_value.
+
+
+Read in the `borders_inc_age` csv file. Create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows.
+
+```{python new-row, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+
+```
+
+```{python new-row-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data[...] ...
+```
+
+```{python new-row-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['number_of_eyebrows'] = ....
+```
+
+```{python new-row-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['number_of_eyebrows'] = 2
+```
+
+```{python new-row-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['number_of_eyebrows'] = 2
+```
+
+```{python new-row-check}
+grade_code()
+```
+
+### Delete a Row/Columns
+
+There are multiple ways to delete rows and columns. 
+
+When deleting a row, you could create a dataframe with the rows containing certain row_values filtered out:
+
+* Deleting a row: `<df_name> = <df_name>[<df_name>['<column_name>'] != '<row_value>']`
+
+You can also delete rows based on their index and row_label by slicing the locations.
+
+* Removing the first row: `<df_name> = <df_name>.iloc[1:]` 
+
+If we want to remove only the 2nd row using the same method, you would need to locate the specific rows you want to keep, and append them together. 
+
+* Removing the second row: `<df_name> = <df_name>.iloc[:1].append(<df_name>.iloc[2:]`
+
+Alternatively, you could use the `drop()` method.
+
+* Removing the second row: `<df_name> = <df_name>.drop(<df_name>.index[1])`
+
+* Removing the second row row_label: `<df_name> = <df_name>.drop('<row_label>', axis=0)` **`axis=0` specifies you are removing a row.**
+
+* Removing the second row by index position: `<df_name> = <df_name>.drop(index_position, axis=0)`
+
+The `drop()` method can also be used to drop columns.
+
+* Removing a column by label: `<df_name> = <df_name>.drop('<column_name>', axis=1)` **`axis=1` specifies you are removing a column.**
+
+* Removing a column by index position: `<df_name> = <df_name>.drop(<df_name>.columns[index_position], axis=1)` 
+
+
+Read in the borders_inc_age csv. Remove all the rows which have `Male` as the value in the `Sex` column.
+
+```{python delete-row, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python delete-row-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data = ...
+```
+
+```{python delete-row-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data = borders_data[...]
+```
+
+```{python delete-row-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data = borders_data[borders_data[...] != ...]
+```
+
+```{python delete-row-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data = borders_data[borders_data['Sex'] != 'Male']
+```
+
+```{python delete-row-check}
+grade_code()
+```
+
+
+## Wrangle – Part 2
+
+### Manipulate Strings
+
+There are a number of ways to manipulate strings in Python. Here are a few methods to achieve various outputs:
+
+* Split values at a delimiter: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.split('<delimiter>')`
+
+* Example: `borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')`
+
+After the above line of code, if you `print(borders_data)`, you will see that all the values in the column `ManagementofPatient` has been split at the value 'a'.
+
+* Strip values of leading and trailing white space: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.strip()`
+* Convert values to upper case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.upper()`
+* Convert values to lower case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.lower()`
+* Replace values: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.replace('<old_value>','<new_value>')`
+
+It is important to note that this is not an exhaustive list of all the string manipulation methods - there are many more to find out and use, depending on your specification requirements.
+
+In the exercise below, read the borders_inc_age csv in, then replace all instances of `B120H` in the `HospitalCode` column with the phrase `BRILLIANT`.
+
+```{python manipulate-string, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python manipulate-string-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = ...
+```
+
+```{python manipulate-string-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = borders_data['HospitalCode']...
+```
+
+```{python manipulate-string-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
+```
+
+```{python manipulate-string-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
+```
+
+```{python manipulate-string-check}
+grade_code()
+```
+
+### Recode
+
+Another way to recode data which offers more flexibility is by using the `loc` attribute.
+
+* `<df_name>.loc[<df_name>['<column_name>'] == <existing_value>, '<column_name>'] = <new_value>`
+
+This method uses the boolean operator `==`, which means **equal to**.
+
+This operator can be substituted with others.
+
+For example, in the case that you wish to find all the values which are less than `5` in a given column, and replace them with `Small`, you would code the following:
+
+* `data_frame.loc[data_frame['column1'] < 5, 'column1'] = 'Small'`
+
+As you can imagine, this methods affords a great level of versatility in data analysis.
+
+In the exercise below, read in the `borders_inc_age` csv file, and recode all instances of `B120H` in the `HospitalCode` column to `Recoded`.
+
+
+```{python recode, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python recode-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data[...] = ...
+```
+
+```{python recode-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == ..., ...] = 'Replaced'
+```
+
+```{python recode-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
+```
+
+```{python recode-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
+```
+
+```{python recode-check}
+grade_code()
+```
+
+### Rename
+
+Renames specific columns in a data frame:
+
+* `<data_frame>.rename(columns={'<old_column_name>':'<new_column_name>'})`
+
+The column `HospitalCode` in `borders_data` doesn't follow the style guide, rename it to `Hospital_Code`. 
+
+
+```{python rename, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python rename-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(...)
+```
+
+```{python rename-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={...})
+```
+
+```{python rename-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
+```
+
+```{python rename-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
+```
+
+```{python rename-check}
+grade_code()
+```
+
+
+### Group By
+
+The `groupby()` function in Pandas allows us to split a Dataframe into group based on one or more keys, such as column values, and then perform operations on them, such as aggregations or transformations.
+
+* `<dataframe>.groupby('<column_name>')`
+
+Read in the `borders_inc_age` csv. Then, apply the `groupby()` function to the `HospitalCode` column.
+
+```{python groupby, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python groupby-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+borders_data.groupby('HospitalCode')
+```
+
+```{python groupby-check}
+grade_code()
+```
+
+
+### Aggregate Dataframe
+
+With the `groupby()` function, we can apply the aggregate `agg()` function in conduct operations on specific columns.
+
+* `<grouped_variable>.agg({<'column'> : <'function'>})`
+
+Multiple operations can also be carried out.
+
+* `<grouped_variable>.agg({<'column'> : [<'function1'>, <'function2'>,<'function3'>]})`
+
+Multiple columns can aggregated.
+
+* `<grouped_variable>.agg({<'column1'> : [<'function1'>, <'function2'>,<'function3'>],<'column2'> : [<'function1'>, <'function2'>,<'function3'>]})`
+
+For example, let's store the above `borders_data.groupby('HospitalCode')` into a variable called `grouped_by_hospital_code`. 
+
+We can now find the `mean`, `max`, `count` and `sum` of the `LengthOfStay` variables, grouped by `HospitalCode`.
+
+* `grouped_by_hospital_code.agg({'LengthOfStay': ['mean','max','count','sum']})`
+
+We could also more easily use the `describe()` function within the `agg()` function detailed above.
+
+Give that a go: Read in the `borders_inc_age` csv file, then group by `HospitalCode`, storing that into a variable called `grouped_by_hospital_code`. Aggregate using the method above. Use the `describe()` function to find important values from the `LengthOfStay` column. 
+
+```{python aggregate, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+
+```
+
+```{python aggregate-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+...
+```
+
+```{python aggregate-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  ...)
+```
+
+```{python aggregate-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  {'LengthOfStay':'describe'})
+
+```
+
+```{python aggregate-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+
+group_by_hospital_code = borders_data.groupby('HospitalCode')
+
+group_by_hospital_code.agg(
+  {'LengthOfStay':'describe'})
+
+```
+
+```{python aggregate-check}
+grade_code()
+```
+
+
+### Merge Dataframe
+
+
+
+```{r join-diagrams-overview, echo=FALSE, fig.align='center', out.width="100%"}
+knitr::include_graphics("images/join_python.png")
+```
+
+
+* `left` - taking all records from the "left", `data_frame_1`, and adding matched records from the "right", `data_frame_2`, introducing `NaN` where the "right", `data_2` had no matching records
+* `right` - taking all records from the "right", `data_frame_2`, and adding matched records from the "left", `data_frame_1`, introducing `NaN` where the "left", `data_frame_1` had no matching records
+* `inner` - producing only records where there were matches on both given data sets
+* `full` - retaining all records from both data sets and introducing `na` on either one where there was no matching records
+
+By default, the merge type will be `inner` unless stated otherwise.
+
+You define the merge/join type by defining the `how = '<type>'`.
+
+You should further define what common columns/variables the data frames should merge `on` by defining the `on = ['<insert_column>']`
+
+* `<data_frame_1>.merge(<data_frame_2>, how = '<join_type>', on = ['<insert_column_1>' , '<insert_column_2>'])`
+
+2 new data-sets have been loaded, `baby5` and `baby6`, these have common variables `FAMILYID` and `DOB`. Using a `left` join, merge them together. 
+
+
+```{python merge, exercise = TRUE, exercise.setup = "pandas-setup"}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+
+
+```
+
+```{python merge-hint-1}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(...)
+
+```
+
+```{python merge-hint-2}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = '...', on = [...])
+
+```
+
+```{python merge-hint-3}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
+
+```
+
+```{python merge-solution}
+
+borders_data = pd.read_csv("data/borders_inc_age.csv")
+baby5 = pd.read_csv("data/Baby5.csv")
+baby6 = pd.read_csv("data/Baby6.csv")
+
+baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
+
+```
+
+```{python merge-check}
+grade_code()
+```
+
 
 
 ## Help & Feedback
