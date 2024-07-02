@@ -32,9 +32,11 @@ tutorial_options(
 ```
 
 
-```{python pandas-setup, include = FALSE, eval = FALSE}
+```{python pandas-setup, include = FALSE, eval = TRUE}
 # Import pandas library
 import pandas as pd 
+
+borders = pd.read_csv("data/borders_inc_age.csv")
 
 borders2 = pd.read_csv("data/borders_inc_age.csv", usecols = ['URI', 'HospitalCode', 'Specialty']) 
 ```
@@ -475,7 +477,7 @@ print(result)
 ```
 
 
-## Control Flow & Iteration
+## Control Flow & Iteration{#comparisonoperators}
 
 As is the case in most other programming languages, control flow is where decisions are made, and iteration is where processes are repeated. 
 
@@ -810,288 +812,332 @@ grade_code()
 
 For the next sections, we will focus on using the pandas module manipulate data and data frames.
 
+### Row Indexes
 
-### Location
+By default, DataFrames come with a **RangeIndex** where the first row is labelled `0`, the second row is labelled `1`, and so on. We can call the `.index` attribute on a DataFrame:
 
-There are multiple ways to wrangle data in Python - some are more straightforward than others.
-
-To begin efficiently locating and manipulating data, it would be beneficial to become familiar with the concept of locating data in a dataframe.
-
-The `loc` and `iloc` attributes are used for indexing, which allows for the locating of data from a dataframe based on row and column labels/indexes.
-
-`loc` - Label-based indexing (such as Hospital Codes, Names, etc.). </br>
-`iloc` - Integer-based indexing (remember Python indexes count from 0).
-
-By default, `loc` and `iloc` locates row indexes, instead of column indexes.
-
-`<df_name>.loc['<row_label>']` will select the first row with row_label as the label index.</br>
-`<df_name>.iloc['<row_index_label>']` will select the row at index == row_index_label.
-
-
-This does not mean the location attributes are isolated to only locating rows - in fact, the real power of the location attributes is in its ability to freely locate relevant rows, columns, values, etc.
-
-It would further be helpful to remember that in some methods, the `axis` stated will indicate whether it is targetting a row or a column.
-
-`axis = 0` = row </br>
-`axis = 1` = column
-
-In the next few sections, we will see how useful the location attributes can be.
-
-
-### Select / Slice Out Columns
-
-By far, the most straightforward way to select a column is by the following method:
-
-* Selecting/Slicing Out a column: `<df_name>["<col_name>"]`
-
-However, by using `loc` and `iloc`, we can start to specify further:
-
-* Selecting/Slicing Out a column: `<df_name>.loc["<row_index>","<column_index>"]`
-
-* Example: `borders_data.loc[:,"Specialty"]` will obtain all the rows from the `Specialty` column.
-
-You may be wondering why using the `loc` attribute is helpful here when the first method is much more simple.
-
-Using `loc`, you have the ability to select specific rows within that column
-
-* Example: `borders_data.loc[0:2,"HospitalCode"]` will obtain the first 3 rows from the `HospitalCode` column.
-
-Read in the data stored in the borders_inc_age csv file, select/slice out the entire `HospitalCode` column using pandas, and print out the selected column.
-
-```{python select, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-column_hospital_code = 
-
+```{python call-index, eval = FALSE, echo = TRUE}
+df.index
 ```
 
-```{python select-hint-1}
+If the DataFrame has the default index, the output will be 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-column_hospital_code = borders_data.loc
+```{python index-output, eval = FALSE, echo = TRUE}
+RangeIndex(start=0, stop=number of rows, step=1)
 ```
 
-```{python select-hint-2}
+indicating that the row labels
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+- start at 0
+- increase by 1 for each row
+- end *before* reaching the total number of rows (since we started counting at 0)
 
-column_hospital_code = borders_data.loc[:,]
+For example, a DataFrame with 3 rows might have the index `RangeIndex(start=0, stop=3, step=1)`.
+
+In this RangeIndex, we start labelling rows at 0, stop before 3, and increase by 1 each row:
+
+- the first row has the label 0
+- the second row has the label 1
+- the third row has the label 2
+
+### Sorting Rows
+
+The syntax to sort a DataFrame `df` in pandas by a particular column is 
+
+```{python sort-value, eval = FALSE, echo = TRUE}
+df = df.sort_values(
+  by = 'Column'
+)
 ```
 
-```{python select-hint-3}
+where
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+- `.sort_values()` is a DataFrame method. By default it will sort in ascending order. To sort in descending order you can add `ascending = False`:
+```{python sort-value-desc, eval = FALSE, echo = TRUE}
+df = df.sort_values(
+  by = 'Column',
+  ascending = False
+)
+```
+- `by` is a keyword that receives the label of the column to sort by.
 
-column_hospital_code = borders_data.loc[:,'HospitalCode']
+Let's sort `borders` by `HospitalCode`:
 
-print(column_hospital_code)
+```{python sort-value2, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders.sort_values(
+  by = 'HospitalCode'
+)
 ```
 
-```{python select-solution}
+### Selecting Specific Rows
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+Sometimes, we are only interested in looking at certain rows and columns of a DataFrame. We can select sections of a DataFrame using two methods: `.loc[]` and `.iloc[]`. 
 
-column_hospital_code = borders_data.loc[:,'HospitalCode']
+We will explore how both of these work using a mini-DataFrame from `borders` data. 
 
-print(column_hospital_code)
+```{python mini-df, echo = FALSE}
+import pandas as pd
+
+mini_df = pd.read_csv("data/borders_inc_age.csv", usecols = ['URI', 'Main_Condition']).head(4)
+
+mini_df
 ```
 
-```{python select-check}
-grade_code()
+Before demonstrating we will sort the data by `Main_Condition`. This isn't necessary to use `.loc[]` or `.iloc[]`, but it will make the difference between them clearer. 
+
+```{python mini-df-sort, echo = FALSE}
+import pandas as pd
+
+mini_df = pd.read_csv("data/borders_inc_age.csv", usecols = ['URI', 'Main_Condition']).head(4)
+
+mini_df.sort_values(by = 'Main_Condition')
 ```
 
+Note that the row index is now out-of-order. This will be important later on. 
 
-### Select Rows
+#### Using `.loc[]`
 
-The pandas library has multiple way to select rows, depending on your criteria.
+The `.loc[]` index works using the index labels:
 
-* Select Rows by index: `<df_name>.iloc[<index_number>]']`
-* Example: `borders_data.iloc[0]` *This will show the first row of the dataframe *
-
-* Select Rows which have a specific value in a specific column: `<df_name>[<df_name>['<column_name>'] == '<row_label>']`
-* Example: `borders_data[borders_data['HospitalCode'] == 'B120H']` *This will show all the rows which have `B120H` in the `HospitalCode` column *
-
-* Select Rows by index: `<df_name>.loc['<row_label>']']`
-* Example: `borders_data.loc['row_label']` *This will locate the first instance of the row with row_label as the label index - please note, this csv file does not have row labels*
-
-Read in the borders_inc_age csv file, and select all the rows with `Specialty == A1`.
-
-```{python select-row, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
+```{python loc, eval = FALSE, echo = TRUE}
+df.loc[list_of_row_labels, list_of_column_labels]
 ```
 
-```{python select-row-hint-1}
+For example, run the following code to see which rows are selected:
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+```{python mini-df-loc, exercise = TRUE, exercise.setup = "pandas-setup"}
+mini_df = pd.read_csv("data/borders_inc_age.csv", usecols = ['URI', 'Main_Condition']).head(4)
 
-rows_of_a1 = borders_data[...]
+mini_df_sort = mini_df.sort_values(by = 'Main_Condition')
+
+mini_df_sort.loc[[0, 2],['Main_Condition']]
 ```
 
-```{python select-row-hint-2}
+The first list (`[0, 2]`) instructs `.loc[]` to select the rows labelled `0` and `2` in order. The second list (`['Main_Condition']`) instructs `.loc[]` to select only the column labelled `Main_Condition`. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+#### Using `.iloc[]`
 
-rows_of_a1 = borders_data[borders_data['...']...]
+The `.iloc[]` index works using the *position* of the rows and columns, instead of their labels:
+
+```{python iloc, eval = FALSE, echo = TRUE}
+df.iloc[list_of_row_positions, list_of_column_positions]
 ```
 
-```{python select-row-hint-3}
+where
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+- both the row positions and column positions start at `0`
+- rows are counted top to bottom
+- columns are counted left to right
 
-rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
+For example, run the following code to see which rows are selected:
+
+```{python mini-df-iloc, exercise = TRUE, exercise.setup = "pandas-setup"}
+mini_df = pd.read_csv("data/borders_inc_age.csv", usecols = ['URI', 'Main_Condition']).head(4)
+
+mini_df_sort = mini_df.sort_values(by = 'Main_Condition')
+
+mini_df_sort.iloc[[0, 2],[1]]
 ```
 
-```{python select-row-solution}
+Here, the list (`[0, 2]`) instructs `.iloc[]` to select only the first row (position `0`) and the third row (position `2`). The column list `[1]` instructs `.iloc[]` to select the second column, which is the column labelled `Main_Condition`. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+### Selecting Ranges of Rows
 
-rows_of_a1 = borders_data[borders_data['Specialty']=='A1']
+Instead of specifying lists of rows and columns with `.loc/.iloc`, we can specify a **slice**, which is like saying `select all rows from row A to row B`. 
+
+#### Slices with `.iloc`
+
+A slice reproduces a consecutive list by specifying where to start and stop, using the syntax `start_position:stop_position`, where
+
+- `start_position` is the first position to include
+- `stop_position` is one position *beyond* the last position to include
+
+For example, to reproduce our list `[0, 1, 2, 3, 4]`, we would use the slice `0:5` to indicate:
+
+- start at position `0`
+- stop before position `5`
+- include all positions in-between (`1`, `2`, `3`, `4`)
+
+We want to select the first 4 rows and the `HospitalCode`, `Specialty`, and `ManagementofPatient` (second to fourth) columns from `borders` after sorting the data by `Main_Condition`. We will need two slices, one for the rows and one for the columns:
+
+- **rows**: we want to start at the first row (postion `0`) and end *before* the fifth row (position `4`). The slice is `0:4` and will include positions `0`, `1`, `2` and `3`. 
+- **columns**: we want to start at the second column (position `1`) and end *before* the fifth column (position `4`). The slice is `1:4` and will include positions `1`, `2` and `3`. 
+
+```{python slice-iloc, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = borders.sort_values(by = 'Main_Condition')
+borders.iloc[0:4,1:4]
 ```
 
-```{python select-row-check}
-grade_code()
+#### Slices with `.loc`
+
+Unlike `.iloc`, slices using `.loc` include the label after the `:` in the slice syntax: `start_label:stop_label`, which will include
+
+- the row/column labelled `start_label`
+- the row/column labelled `stop_label`
+- all rows/columns in between
+
+Let's use `.loc` to select the same section of `borders`. This is how the data looks like after soring by `Main_Condition`:
+
+```{python slice-loc1, echo = FALSE}
+borders = borders.sort_values(by = 'Main_Condition')
+borders
 ```
 
-### Add a New Row/Column
+Again we will need two slices:
 
-Adding a new row/column is straightforward.
+- **rows**: the first four rows start at the label `5018` and end at `23180`. The slice is `5018:23180` and will include rows labelled `5018`, `6671`, `3420` and `23180`. Note how the `stop_label` is included, unlike with `.iloc`. 
+- **columns**: the first column to include is labelled `HospitalCode` and the last is `ManagementofPatient`. The slice is `'HospitalCode':'ManagementofPatient'` and will include columns labelled `HospitalCode`, `Specialty` and `ManagementofPatient`.
 
-When adding a new row, you can first create a dictionary, where `keys` (column names) and `values` (corresponding values in the new row) are mapped together.
-
-* Create dictionary of mapped keys (columns) and values (row values): 
-`new_row_data = {'<column_name>':'<row_value>','<column_name>':'<row_value>','<column_name>':'<row_value>'}`
-
-Then, you can append the new row into the dataframe.
-
-* `<df_name> = <df_name>.append(new_row_data)`
-
-If you want to leave the value blank, you can input `None` into the row_value.
-
-
-* Add new column: `<df_name>['<new_column_name>'] = <row_value>`
-
-This will create a new column with all the rows populated by the row_value.
-
-
-Read in the `borders_inc_age` csv file. Create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows.
-
-```{python new-row, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
-
+```{python slice-loc2, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = borders.sort_values(by = 'Main_Condition')
+borders.loc[5018:23180,'HospitalCode':'ManagementofPatient']
 ```
 
-```{python new-row-hint-1}
+#### Open-Ended Slices
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+If we don't want to specify a start value, the slice will start at the first position/label. For example, the `.iloc` slice `:3` would include rows at positions `0`, `1` and `2`. 
 
-borders_data[...] ...
+Similarly, if we don't specify an end value, the slice will end at the final position/label. For example, the `.loc` slice `'HospitalCode':` will include every column starting at `HospitalCode` through to the final column of the DataFrame. 
+
+If we specify neither the start nor the final value, the slice will include all rows and columns. For example, the code `borders.iloc[0:2,:]` will include rows at positions `0` and `1` along with every column. 
+
+### Boolean Masks
+
+We often need to select data by properties, instead of by position/index. For example we might want to select all rows in `borders` corresponding to the HospitalCode as `B120H`. We can achieve this using Python's [comparison operators](#comparisonoperators) to compare values. Whenever we compare two variables using a comparison operator, Python returns a `True` if the comparison is correct, and a `False` if it is incorrect. 
+
+For example, here are a few comparisons and their output:
+
+```{python boolean-mask1, echo = TRUE, eval = TRUE}
+3 == 4
 ```
 
-```{python new-row-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['number_of_eyebrows'] = ....
+```{python boolean-mask2, echo = TRUE, eval = TRUE}
+3 < 4
 ```
 
-```{python new-row-hint-3}
+We can also use `==` to compare non-numeric variable types:
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['number_of_eyebrows'] = 2
+```{python boolean-mask3, echo = TRUE, eval = TRUE}
+'car' == 'truck'
 ```
 
-```{python new-row-solution}
+Pandas can perform comparisons for an entire column at once using the same comparisons. For example, to determine which rows of `HospitalCode` column contain `B120H`, we would use the code `df['HospitalCode'] == 'B120H'`. The output of this code is a Series with `True` for all the rows where the comparison is `True`:
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['number_of_eyebrows'] = 2
+```{python boolean-mask4, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders.head(10)['HospitalCode'] == 'B120H'
 ```
 
-```{python new-row-check}
-grade_code()
+The output True/False Series is called a **Boolean mask**, which allows you to see only certain features of a column (e.g. whether the value is `B120H`) while obscuring others. 
+
+It can be helpful to assign a Boolean mask to a variable. For example let's assign the Boolean mask above to the variable `is_hosp`. It's good practice though not strictly necessary, to use parentheses to make this clearer:
+
+```{python boolean-mask5, echo = TRUE}
+is_hosp = (borders.head(10)['HospitalCode'] == 'B120H')
 ```
 
-### Delete a Row/Columns
+Note that two `=` signs performs the comparison, and one `=` performs the assignment to the variable. 
 
-There are multiple ways to delete rows and columns. 
+### Filtering Rows with Booleans
 
-When deleting a row, you could create a dataframe with the rows containing certain row_values filtered out:
+A Boolean mask tells us which rows have a certain property. What we usually want is to actually filter the DataFrame down to only those rows where Boolean mask is `True`. We can pass the mask to the DataFrame:
 
-* Deleting a row: `<df_name> = <df_name>[<df_name>['<column_name>'] != '<row_value>']`
+```{python boolean-mask6, exercise = TRUE, exercise.setup = "pandas-setup"}
+is_hosp = (borders.head(10)['HospitalCode'] == 'B120H')
 
-You can also delete rows based on their index and row_label by slicing the locations.
-
-* Removing the first row: `<df_name> = <df_name>.iloc[1:]` 
-
-If we want to remove only the 2nd row using the same method, you would need to locate the specific rows you want to keep, and append them together. 
-
-* Removing the second row: `<df_name> = <df_name>.iloc[:1].append(<df_name>.iloc[2:]`
-
-Alternatively, you could use the `drop()` method.
-
-* Removing the second row: `<df_name> = <df_name>.drop(<df_name>.index[1])`
-
-* Removing the second row row_label: `<df_name> = <df_name>.drop('<row_label>', axis=0)` **`axis=0` specifies you are removing a row.**
-
-* Removing the second row by index position: `<df_name> = <df_name>.drop(index_position, axis=0)`
-
-The `drop()` method can also be used to drop columns.
-
-* Removing a column by label: `<df_name> = <df_name>.drop('<column_name>', axis=1)` **`axis=1` specifies you are removing a column.**
-
-* Removing a column by index position: `<df_name> = <df_name>.drop(<df_name>.columns[index_position], axis=1)` 
-
-
-Read in the borders_inc_age csv. Remove all the rows which have `Male` as the value in the `Sex` column.
-
-```{python delete-row, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
+borders.head(10)[is_hosp]
 ```
 
-```{python delete-row-hint-1}
+### Combining Booleans with And
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+We may want to filter the rows where patients are from hospital `B120H` with certain specialty (e.g. `A1`). Under this case the two comparisons can be combined with `and` to test if both are simultaneously true. Pandas uses the symbol `&` for this. Let's perform the row selection by combining the comparisons for the first 10 rows from `borders`:
 
-borders_data = ...
+```{python boolean-mask7, exercise = TRUE, exercise.setup = "pandas-setup"}
+is_hosp = (borders.head(10)['HospitalCode'] == 'B120H') #assign the first condition to a variable
+
+is_spec = (borders.head(10)['Specialty'] == 'A1') #assign the second condition to a variable
+
+borders.head(10)[is_hosp & is_spec]
 ```
 
-```{python delete-row-hint-2}
+Note that if there are no rows match the conditions, filtering the DataFrame will produce a result with column labels in the header but no actual rows. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+### Combining Booleans with Or
 
-borders_data = borders_data[...]
+In Python, `or` behaves the same way: it outputs `True` as long as **one of** the combined comparisons is `True`. Pandas uses the symbol `|` instead of `or`. If we use `|` for the example above, which rows will be selected?
+
+```{python boolean-mask8, exercise = TRUE, exercise.setup = "pandas-setup"}
+is_hosp = (borders.head(10)['HospitalCode'] == 'B120H') #assign the first condition to a variable
+
+is_spec = (borders.head(10)['Specialty'] == 'A1') #assign the second condition to a variable
+
+borders.head(10)[is_hosp | is_spec]
 ```
 
-```{python delete-row-hint-3}
+We can see the rows where either hospital is `B120H` or specialty is `A1` are filtered this time, as long as one of the conditions is met. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+### Inverting Booleans with Not
 
-borders_data = borders_data[borders_data[...] != ...]
+What if we want to select the rows where specialty is **not** `A1`? Pandas uses the symbol `~` for `not/non` to exclude the rows we don't want:
+
+```{python boolean-mask9, exercise = TRUE, exercise.setup = "pandas-setup"}
+is_spec = (borders.head(10)['Specialty'] == 'A1') #assign the condition to a variable
+
+not_spec = ~is_spec #create a new Boolean mask to invert the pre-existing mask
+
+borders.head(10)[not_spec]
 ```
 
-```{python delete-row-solution}
+You can see the rows with specialty `A1` are excluded. `~` simply swaps `True` and `False`. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+### Add/Delete a Column
 
-borders_data = borders_data[borders_data['Sex'] != 'Male']
+To add a new column, you can use
+
+```{python add-column, eval = FALSE, echo = TRUE}
+df[new_column_name] = row_value
 ```
 
-```{python delete-row-check}
-grade_code()
+This will create a new column with all the rows populated by the `row_value`.
+
+Let's create a new column called `number_of_eyebrows` with the row_value as `2` for all the rows in the `borders` DataFrame.
+
+```{python new-column, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders['number_of_eyebrows'] = 2
+
+borders.head()
 ```
 
+Sometimes we want to delete certain columns. We can use `drop` method to do so. 
+
+* Removing a column by label: 
+
+```{python remove-column1, eval = FALSE, echo = TRUE}
+df = df.drop(list_of_column_labels, axis = 1) 
+# axis = 1 specifies you are removing a column
+```
+
+Let's load the first 10 rows of `borders`, and remove the first two columns `URI` and `HospitalCode` by their column labels (column names):
+
+```{python delete-column1, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders_10 = borders.head(10)
+
+borders_10.drop(['URI', 'HospitalCode'], axis = 1)
+```
+
+* Removing a column by index position: 
+
+```{python remove-column2, eval = FALSE, echo = TRUE}
+df = df.drop(df.columns[list_of_column_positions], axis = 1) 
+# axis = 1 specifies you are removing a column
+```
+
+Let's replicate the last example by using this method:
+
+```{python delete-column2, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders_10 = borders.head(10)
+
+borders_10.drop(borders_10.columns[[0, 1]], axis = 1)
+```
 
 ## Wrangle – Part 2
 
