@@ -1145,279 +1145,156 @@ borders_10.drop(borders_10.columns[[0, 1]], axis = 1)
 
 There are a number of ways to manipulate strings in Python. Here are a few methods to achieve various outputs:
 
-* Split values at a delimiter: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.split('<delimiter>')`
+* Split values at a delimiter: 
 
-* Example: `borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')`
+```{python split_value, eval = FALSE, echo = TRUE}
+df['column_name'] = df['column_name'].str.split('delimiter')
+```
 
-After the above line of code, if you `print(borders_data)`, you will see that all the values in the column `ManagementofPatient` has been split at the value 'a'.
+For example, we would like to split the strings in the column `ManagementofPatient` at the value `a`.
 
-* Strip values of leading and trailing white space: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.strip()`
-* Convert values to upper case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.upper()`
-* Convert values to lower case: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.lower()`
-* Replace values: `<df_name>['<column_name>'] = <df_name>['<column_name>'].str.replace('<old_value>','<new_value>')`
+```{python split_value_example, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders_data['ManagementofPatient'] = borders_data['ManagementofPatient'].str.split('a')
 
-It is important to note that this is not an exhaustive list of all the string manipulation methods - there are many more to find out and use, depending on your specification requirements.
+print(borders_data)
+```
+
+There are some other commonly used string methods:
+
+* Strip values of leading and trailing white space: 
+```{python strip_value, eval = FALSE, echo = TRUE}
+df['column_name'] = df['column_name'].str.strip()
+```
+
+* Convert values to upper or lower case: 
+```{python convert_case, eval = FALSE, echo = TRUE}
+df['column_name'] = df['column_name'].str.upper()
+df['column_name'] = df['column_name'].str.lower()
+```
+
+* Replace (recode) values: 
+```{python replace_value, eval = FALSE, echo = TRUE}
+df['column_name'] = df['column_name'].str.replace('old_value','new_value')
+```
 
 In the exercise below, read the borders_inc_age csv in, then replace all instances of `B120H` in the `HospitalCode` column with the phrase `BRILLIANT`.
 
 ```{python manipulate-string, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = pd.read_csv("data/borders_inc_age.csv")
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+borders['HospitalCode'] = borders['HospitalCode'].str.replace('B120H','BRILLIANT')
 
-
-```
-
-```{python manipulate-string-hint-1}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['HospitalCode'] = ...
-```
-
-```{python manipulate-string-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['HospitalCode'] = borders_data['HospitalCode']...
-```
-
-```{python manipulate-string-hint-3}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
-```
-
-```{python manipulate-string-solution}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data['HospitalCode'] = borders_data['HospitalCode'].str.replace('B120H','BRILLIANT')
-```
-
-```{python manipulate-string-check}
-grade_code()
+# View the result
+borders.head(10)
 ```
 
 ### Recode
 
 Another way to recode data which offers more flexibility is by using the `loc` attribute.
 
-* `<df_name>.loc[<df_name>['<column_name>'] == <existing_value>, '<column_name>'] = <new_value>`
+```{python recode, eval = FALSE, echo = TRUE}
+df.loc[df['column_name'] == existing_value, 'column_name'] = new_value
+```
 
-This method uses the boolean operator `==`, which means **equal to**.
+This method uses the boolean [operator](#comparisonoperators) `==`, which means **equal to**. We can also apply other operators. 
 
-This operator can be substituted with others.
+For example, in the case that you wish to find all the values which are less than `5` in a given column, and replace them with `Small number`, you would code the following:
 
-For example, in the case that you wish to find all the values which are less than `5` in a given column, and replace them with `Small`, you would code the following:
-
-* `data_frame.loc[data_frame['column1'] < 5, 'column1'] = 'Small'`
+```{python recode-example, eval = FALSE, echo = TRUE}
+df.loc[df['column_name'] < 5, 'column_name'] = 'Small number'
+```
 
 As you can imagine, this methods affords a great level of versatility in data analysis.
 
 In the exercise below, read in the `borders_inc_age` csv file, and recode all instances of `B120H` in the `HospitalCode` column to `Recoded`.
 
 
-```{python recode, exercise = TRUE, exercise.setup = "pandas-setup"}
+```{python recode-exercise, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = pd.read_csv("data/borders_inc_age.csv")
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+borders.loc[borders['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Recoded'
 
-
-```
-
-```{python recode-hint-1}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.loc[borders_data[...] = ...
-```
-
-```{python recode-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.loc[borders_data['HospitalCode'] == ..., ...] = 'Replaced'
-```
-
-```{python recode-hint-3}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
-```
-
-```{python recode-solution}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.loc[borders_data['HospitalCode'] == 'B120H', 'HospitalCode'] = 'Replaced'
-```
-
-```{python recode-check}
-grade_code()
+# View the result
+borders.head(10)
 ```
 
 ### Rename
 
-Renames specific columns in a data frame:
+Sometimes we would like to renames specific columns in a data frame:
 
-* `<data_frame>.rename(columns={'<old_column_name>':'<new_column_name>'})`
-
-The column `HospitalCode` in `borders_data` doesn't follow the style guide, rename it to `Hospital_Code`. 
-
-
-```{python rename, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
+```{python rename, eval = FALSE, echo = TRUE}
+df.rename(columns = {'old_column_name':'new_column_name'})
 ```
 
-```{python rename-hint-1}
+For example, the column `HospitalCode` in `borders_data` doesn't follow the style guide, let's rename it to `Hospital_Code`. 
 
-borders_data = pd.read_csv("data/borders_inc_age.csv")
+```{python rename-exercise, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = pd.read_csv("data/borders_inc_age.csv")
 
-borders_data.rename(...)
+borders = borders.rename(columns = {'HospitalCode':'Hospital_Code'})
+
+# View the result
+borders.head(10)
 ```
-
-```{python rename-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.rename(columns={...})
-```
-
-```{python rename-hint-3}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
-```
-
-```{python rename-solution}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.rename(columns={'HospitalCode':'Hospital_Code'})
-```
-
-```{python rename-check}
-grade_code()
-```
-
 
 ### Group By
 
-The `groupby()` function in Pandas allows us to split a Dataframe into group based on one or more keys, such as column values, and then perform operations on them, such as aggregations or transformations.
+The `groupby()` function in Pandas allows us to split a Dataframe into groups based on one or more keys, such as column values, and then perform operations on them, such as aggregations or transformations:
 
-* `<dataframe>.groupby('<column_name>')`
+```{python groupby, eval = FALSE, echo = TRUE}
+df.groupby('column_name')
+```
 
 Read in the `borders_inc_age` csv. Then, apply the `groupby()` function to the `HospitalCode` column.
 
-```{python groupby, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
+```{python groupby-exercise, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = pd.read_csv("data/borders_inc_age.csv")
+borders.groupby('HospitalCode')
 ```
-
-```{python groupby-hint-1}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-borders_data.groupby('HospitalCode')
-```
-
-```{python groupby-check}
-grade_code()
-```
-
 
 ### Aggregate Dataframe
 
-With the `groupby()` function, we can apply the aggregate `agg()` function in conduct operations on specific columns.
+After assigning `groupby()` function to a new variable, we can apply the aggregate `agg()` function to conduct operations on specific columns.
 
-* `<grouped_variable>.agg({<'column'> : <'function'>})`
+```{python aggregate1, eval = FALSE, echo = TRUE}
+grouped_variable.agg({'column' : 'function'})
+```
 
-Multiple operations can also be carried out.
+Multiple operations can also be carried out:
 
-* `<grouped_variable>.agg({<'column'> : [<'function1'>, <'function2'>,<'function3'>]})`
+```{python aggregate2, eval = FALSE, echo = TRUE}
+grouped_variable.agg({'column' : ['function1','function2','function3']})
+```
 
-Multiple columns can aggregated.
+Also multiple columns can be aggregated:
 
-* `<grouped_variable>.agg({<'column1'> : [<'function1'>, <'function2'>,<'function3'>],<'column2'> : [<'function1'>, <'function2'>,<'function3'>]})`
+```{python aggregate3, eval = FALSE, echo = TRUE}
+grouped_variable.agg({'column1' : ['function1','function2','function3'],
+'column2' : ['function1','function2','function3']})
+```
 
-For example, let's store the above `borders_data.groupby('HospitalCode')` into a variable called `grouped_by_hospital_code`. 
+For example, We want to find the `mean`, `max`, `count` and `sum` of the `LengthOfStay` variables, grouped by `HospitalCode`. 
 
-We can now find the `mean`, `max`, `count` and `sum` of the `LengthOfStay` variables, grouped by `HospitalCode`.
-
-* `grouped_by_hospital_code.agg({'LengthOfStay': ['mean','max','count','sum']})`
+First let's store the above `borders_data.groupby('HospitalCode')` into a new variable called `grouped_by_hospital_code`, and then use `agg()` to get the results. 
+```{python aggregate-example, eval = FALSE, echo = TRUE}
+grouped_by_hospital_code.agg({'LengthOfStay': ['mean','max','count','sum']})
+```
 
 We could also more easily use the `describe()` function within the `agg()` function detailed above.
 
 Give that a go: Read in the `borders_inc_age` csv file, then group by `HospitalCode`, storing that into a variable called `grouped_by_hospital_code`. Aggregate using the method above. Use the `describe()` function to find important values from the `LengthOfStay` column. 
 
-```{python aggregate, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-
+```{python aggregate-exercise, exercise = TRUE, exercise.setup = "pandas-setup"}
+borders = pd.read_csv("data/borders_inc_age.csv")
+group_by_hospital_code = borders.groupby('HospitalCode')
+group_by_hospital_code.agg({'LengthOfStay':'describe'})
 ```
-
-```{python aggregate-hint-1}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-group_by_hospital_code = borders_data.groupby('HospitalCode')
-
-...
-```
-
-```{python aggregate-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-group_by_hospital_code = borders_data.groupby('HospitalCode')
-
-group_by_hospital_code.agg(
-  ...)
-```
-
-```{python aggregate-hint-3}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-group_by_hospital_code = borders_data.groupby('HospitalCode')
-
-group_by_hospital_code.agg(
-  {'LengthOfStay':'describe'})
-
-```
-
-```{python aggregate-solution}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-
-group_by_hospital_code = borders_data.groupby('HospitalCode')
-
-group_by_hospital_code.agg(
-  {'LengthOfStay':'describe'})
-
-```
-
-```{python aggregate-check}
-grade_code()
-```
-
 
 ### Merge Dataframe
-
-
 
 ```{r join-diagrams-overview, echo=FALSE, fig.align='center', out.width="100%"}
 knitr::include_graphics("images/join_python.png")
 ```
-
 
 * `left` - taking all records from the "left", `data_frame_1`, and adding matched records from the "right", `data_frame_2`, introducing `NaN` where the "right", `data_2` had no matching records
 * `right` - taking all records from the "right", `data_frame_2`, and adding matched records from the "left", `data_frame_1`, introducing `NaN` where the "left", `data_frame_1` had no matching records
@@ -1428,68 +1305,21 @@ By default, the merge type will be `inner` unless stated otherwise.
 
 You define the merge/join type by defining the `how = '<type>'`.
 
-You should further define what common columns/variables the data frames should merge `on` by defining the `on = ['<insert_column>']`
+You should further define what common columns/variables the data frames should merge `on` by defining the `on = ['column']`
 
-* `<data_frame_1>.merge(<data_frame_2>, how = '<join_type>', on = ['<insert_column_1>' , '<insert_column_2>'])`
+```{python merge, eval = FALSE, echo = TRUE}
+df1.merge(df2, how = 'join_type', on = ['column1' , 'column2'])
+```
 
 2 new data-sets have been loaded, `baby5` and `baby6`, these have common variables `FAMILYID` and `DOB`. Using a `left` join, merge them together. 
 
-
-```{python merge, exercise = TRUE, exercise.setup = "pandas-setup"}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-baby5 = pd.read_csv("data/Baby5.csv")
-baby6 = pd.read_csv("data/Baby6.csv")
-
-
-
-```
-
-```{python merge-hint-1}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-baby5 = pd.read_csv("data/Baby5.csv")
-baby6 = pd.read_csv("data/Baby6.csv")
-
-baby5.merge(...)
-
-```
-
-```{python merge-hint-2}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-baby5 = pd.read_csv("data/Baby5.csv")
-baby6 = pd.read_csv("data/Baby6.csv")
-
-baby5.merge(baby6, how = '...', on = [...])
-
-```
-
-```{python merge-hint-3}
-
+```{python merge-exercise, exercise = TRUE, exercise.setup = "pandas-setup"}
 borders_data = pd.read_csv("data/borders_inc_age.csv")
 baby5 = pd.read_csv("data/Baby5.csv")
 baby6 = pd.read_csv("data/Baby6.csv")
 
 baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
-
 ```
-
-```{python merge-solution}
-
-borders_data = pd.read_csv("data/borders_inc_age.csv")
-baby5 = pd.read_csv("data/Baby5.csv")
-baby6 = pd.read_csv("data/Baby6.csv")
-
-baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
-
-```
-
-```{python merge-check}
-grade_code()
-```
-
-
 
 ## Help & Feedback
 
