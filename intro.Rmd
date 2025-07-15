@@ -200,7 +200,7 @@ This section will walk you through some of the foundational knowledge of Python,
 
 Without proper indentations, your code will not run. Try to run the following code with improper indentation:
 
-```{python indentation1, exercise=TRUE}
+```{python indentation1, exercise = TRUE}
 if 1 < 10:
 print("One is less than ten.")
 ```
@@ -209,7 +209,7 @@ Note the syntax error which was shown:
 
 Now run the code with the proper indentation:
 
-```{python indentation2, exercise=TRUE}
+```{python indentation2, exercise = TRUE}
 if 1 < 10:
   print("One is less than ten.")
 ```
@@ -1325,5 +1325,5 @@ baby5.merge(baby6, how = 'left', on = ['FAMILYID','DOB'])
 
 #### Feedback
 
-[Insert iframe for Google/Microsoft Forms]
+<iframe width="100%" height= "2300" src= "https://forms.office.com/Pages/ResponsePage.aspx?id=veDvEDCgykuAnLXmdF5JmibxHi_yzZ9Pvduh8IqoF_5UQkJZQlMwVlNOMTJaVk00Qk1BN01EV1FJSiQlQCN0PWcu&embed=true" frameborder= "0" marginwidth= "0" marginheight= "0" style= "border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
 
