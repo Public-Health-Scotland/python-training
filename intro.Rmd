@@ -1107,7 +1107,7 @@ print(mean_value) # Print out to see the result
 
 * Frequency:
 ```{python frequency, eval = FALSE, echo = TRUE}
-df["column_name".value_counts()]
+df["column_name"].value_counts()
 ```
 
 * Crosstab: 
